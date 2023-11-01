@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from django.contrib import messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,9 +41,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'order.apps.OrderConfig',
     # 'corsheaders',
-    'authentication',
+    'allauth',
+    # 'allauth.account',
+    'captcha',
+    'account',
     'Ecommerce',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'TatfoMarket.urls'
@@ -132,6 +142,7 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -141,9 +152,107 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CART_SESSION_ID = 'cart'
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'account:login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'welcome'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = "vinyassou@yahoo.fr"
+# EMAIL_HOST_PASSWORD = "vinyassou"
+
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
+RECAPTCHA_PUBLIC_KEY = '6LfWRsMoAAAAAMASej2EiBgBmzsQFwfGSezpcadb'
+RECAPTCHA_PRIVATE_KEY = '6LfWRsMoAAAAABTQSMbqEdMz5MZfvmrIf9PqZC96'
+
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        
+         'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+
+
+        'APP': {
+            'client_id': '123',
+            'secret': '574111392765-150nfpg6sn2dql8o0m78j2cfqduuu7an.apps.googleusercontent.com',
+            'key': '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'
+        }
+    },
+
+    'github': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        
+         'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+
+
+        'APP': {
+            'client_id': '123',
+            'secret': '9e85d9492e25f149252b',
+            'key': 'f190d24327ee5ffdc6063caf02b4590f9cf586ed'
+        }
+    },
+
+    'facebook': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        
+         'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+
+
+        'APP': {
+            'client_id': '123',
+            'secret': '',
+            'key': ''
+        }
+    }
+}
+
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend'
+    ]
+
+# http://127.0.0.1:8000/google/login/callback
+# http://127.0.0.1:8000/google/

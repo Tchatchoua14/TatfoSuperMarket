@@ -1,4 +1,5 @@
-    <!--Top Header-->
+{% load static %} 
+   <!--Top Header-->
     <div class="top-header">
         <div class="container-fluid">
             <div class="row">
@@ -17,9 +18,15 @@
                 <div class="col-2 col-sm-4 col-md-3 col-lg-4 text-right">
                 	<span class="user-menu d-block d-lg-none"><i class="anm anm-user-al" aria-hidden="true"></i></span>
                     <ul class="customer-links list-inline">
-                        <li><a href="login.html"><span class="icon-lock"></span> Login</a></li>
-                        <li><a href="register.html"><i class="fa fa-user" style="margin-top: -2px; margin-right: 1px;"></i> Create Account</a></li>
-                        <li><a href="wishlist.html"><i class="fa fa-heart"  style="margin-top: -2px; margin-right: 1px;"></i> Wishlist</a></li>
+                        
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'account:profile' %}"><span class="text-lowercase mr-1">{{ user.email }}</span></a></li>
+                        <li><a href="{% url 'account:logout' %}"><span class="mr-1">Log Out</span></a></li>
+                        {% else %}
+                        <li><a href="{% url 'account:login' %}"><span class="mr-1">Log In</span></a></li>
+                        <li> <a href="{% url 'account:register' %}"><i class="fa fa-user mr-1" style="margin-top: -2px; margin-right: 1px;"></i>Create Account</a> </li>
+                        {% endif %}
+                        <li><a href=""><i class="fa fa-heart mr-1" style="margin-top: -2px; margin-right: 1px;"></i>Wishlist</a></li>
                         
                     </ul>
                 </div>

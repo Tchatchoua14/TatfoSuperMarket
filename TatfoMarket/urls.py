@@ -21,12 +21,30 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('Ecommerce.urls')),
-    # path('', include('authentication.urls')),
-    #   path('order/', include('order.urls', namespace='order')),
+    path('TatfoSuperMarket', include('Ecommerce.urls')),
+    path('accounts/', include('account.urls')),
+    path('', include('allauth.urls')),
+    #path('order/', include('order.urls', namespace='order')),
 ]
 
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL,
-#                           document_root=settings.MEDIA_ROOT)
+#handling the 404 error
+handler404 = 'Ecommerce.views.error_404_view'
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# github
+# cle client 9e85d9492e25f149252b
+# cle secret f190d24327ee5ffdc6063caf02b4590f9cf586ed 
+
+# facebook
+# cle client 
+# cle secret  
+
+# google
+# 574111392765-150nfpg6sn2dql8o0m78j2cfqduuu7an.apps.googleusercontent.com
+# cle client 574111392765-150nfpg6sn2dql8o0m78j2cfqduuu7an.apps.googleusercontent.com
+# cle secret  AIzaSyC0M1imkUdjC7FIZVmZ5TPfYQ_LjkYzUnU
+#    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  vrai code secret
+    # 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
