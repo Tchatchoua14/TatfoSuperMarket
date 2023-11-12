@@ -8,6 +8,7 @@ app_name = 'account'
 
 urlpatterns = [
     # path('', views.Home.as_view(template_name='index.html'), name='home1'),
+    # path("change-password/", auth_views.PasswordChangeView.as_view()),
     path('login/', auth_views.LoginView.as_view(redirect_authenticated_user=True, template_name='registration/login.html'), name="login"),
     path('logout/', views.logout_view, name="logout"),
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset.html', html_email_template_name='registration/password_reset_email.html'), name="password_reset"),
