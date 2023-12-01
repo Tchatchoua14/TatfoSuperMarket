@@ -17,15 +17,18 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Ecommerce.urls')),
-    path('', include('account.urls')),
+    path('', include('accountss.urls')),
+    path('', include('django.contrib.auth.urls')),
+    path('cart/', include('cart.urls', namespace='cart')),
+    path('coupons/', include('coupons.urls', namespace='coupons')),
     # path('accounts/', include('account.urls')),
-    # path('', include('allauth.urls')),
-    path('oauth/', include('social_django.urls', namespace='social')),
+    # path('accounts/', include('allauth.urls')),
+    # re_path('accounts/', include('social_django.urls', namespace='social')),
     # path('social-auth/', include('social_django.urls', namespace='social')),
     #path('order/', include('order.urls', namespace='order')),
 ]

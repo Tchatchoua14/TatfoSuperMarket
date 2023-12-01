@@ -1,0 +1,91 @@
+{% extends "master.html" %}
+{% load static %}
+{% block title %}
+Wishlist
+{% endblock %}
+{% block content %}
+{% include 'partials/header.html' %}
+{% include 'partials/menu.html' %}
+    
+     <!--Body Content-->
+     <div id="page-content" class="mt-5">
+    	<!--Page Title-->
+        
+    	<div class="page section-header text-center">
+			<div class="page-title">
+        		<div class="wrapper"><h1 class="page-width">Wish List</h1></div>
+      		</div>
+		</div>
+        <!--End Page Title-->
+              <!--Breadcrumb-->
+              <div class="bredcrumbWrap">
+                <div class="container breadcrumbs">
+                    <a href="{% url 'Ecommerce:home' %}" title="Back to the home page">Home</a><span aria-hidden="true">›</span><span>Product Layout Style1</span>
+                </div>
+            </div>
+            <!--End Breadcrumb-->
+        
+        <div class="container">
+        	<div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
+                	<form action="#">
+                        <div class="wishlist-table table-content table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                    	<th class="product-name text-center alt-font">Remove</th> 
+                                        <th class="product-price text-center alt-font">Images</th>
+                                        <th class="product-name alt-font">Product</th>
+                                        <th class="product-price text-center alt-font">Unit Price</th>
+                                        <th class="stock-status text-center alt-font">Stock Status</th>
+                                        <th class="product-subtotal text-center alt-font">Add to Cart</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if wishlist.products.all %}
+                                    {% for product in wishlist.products.all %}
+                                    <tr>
+                                        
+                                    	<td class="product-remove text-center" valign="middle"><a href="{% url 'Ecommerce:remove_from_wishlist' product.id %}"><i class="icon icon anm anm-times-l"></i></a></td>
+                                        <td class="product-thumbnail text-center">
+                                            <a href="#"><img src="{{ product.image1.url }}" alt="" title="" /></a>
+                                        </td>
+                                        <td class="product-name"><h4 class="no-margin"><a href="#">{{ product.name }}</a></h4></td>
+                                        <td class="product-price text-center"><span class="amount">{{ product.price }} FCFA</span></td>
+                                        <td class="stock text-center">
+                                            <span class="in-stock">{{ product.stock }}</span>
+                                        </td>
+                                        <td class="product-subtotal text-center">
+                                              <form  action="{% url "Ecommerce:add_to_cart" %}" method="post">
+                                                {% csrf_token %}
+                                                    <input type="hidden" name="product" value="{{product.id}}">
+                                                    {% comment %} <button type="submit" class="btn btn-primary ml-3">Add to Cart</button> {% endcomment %}
+                                                    <button class="btn btn-small" type="submit" tabindex="0">Add To Cart</button>
+                                            </form>
+                                        </td>
+                                    
+                                      
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <p>Your wishlist is empty.</p>
+                                    {%endif %}
+                                </tbody>
+                                <tfoot
+                                >
+                                    <tr>
+                                        <td colspan="3" class="text-left"><a href="{% url 'Ecommerce:home' %}" class="btn--link cart-continue"><i class="icon icon-arrow-circle-left"></i> Continue shopping</a></td>
+                                        <td colspan="3" class="text-right"><button type="submit" name="update" class="btn--link cart-update"></button></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </form>                   
+               	</div>
+            </div>
+        </div>
+        
+    </div>
+    <!--End Body Content-->
+
+{% endblock %}

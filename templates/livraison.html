@@ -1,0 +1,43 @@
+{% extends "master.html" %}
+{% load static %}
+{% block title %}
+Livraison
+{% endblock %}
+{% block content %}
+{% include 'partials/header.html' %}
+{% include 'partials/menu.html' %}
+
+    <!--Body Content-->
+    <div id="page-content" class="mt-5">
+    	<!--Page Title-->
+    	<div class="page section-header text-center">
+			<div class="page-title">
+        		<div class="wrapper"><h1 class="page-width">Livraison</h1></div>
+      		</div>
+		</div>
+        <!--End Page Title-->
+        
+        <div class="container">
+        	<div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-3">
+                    <div class="">
+                        <form method="post" action={% url 'Ecommerce:procces_livraison' %}>
+                         {% csrf_token %}
+                         <label>Choisissez votre moyens de Livraison:</label>
+                         <select>
+                            {% for moyen in moyens %}
+                            <option value="{{ moyen.id}}">{{ moyen.nom }} - {{ moyen.frais }}FCFA </option>
+                            {% endfor %}
+                         </select>
+                         <button type="submit">Continuer</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+    <!--End Body Content-->
+
+{% endblock %}
