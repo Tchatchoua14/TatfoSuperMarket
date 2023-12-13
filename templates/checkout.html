@@ -73,7 +73,10 @@ Checkout
             <div class="row billing-fields">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 sm-margin-30px-bottom">
                     <div class="create-ac-content bg-light-gray padding-20px-all">
-                        <form>
+                        <form id="payment-form" method="post" action="{% url 'Ecommerce:charge' %}">
+                            {% csrf_token %}
+                            <div id="card-element"></div>
+                           
                             <fieldset>
                                 <h2 class="login-title mb-3">Billing details</h2>
                                 <div class="row">
@@ -151,7 +154,7 @@ Checkout
                                     </div>
                                 </div>
                             </fieldset>
-
+                          
                             <fieldset>
                                 <div class="row">
                                     <div class="form-group form-check col-md-12 col-lg-12 col-xl-12">
@@ -191,22 +194,24 @@ Checkout
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for item in carts %}
                                         <tr>
-                                            <td class="text-left">Spike Jacket</td>
-                                            <td>$99</td>
-                                            <td>S</td>
-                                            <td>1</td>
-                                            <td> FCFA</td>
+                                            <td class="text-left">{{item.product.name}}</td>
+                                            <td>{{item.product.price}} FCFA</td>
+                                            <td>{{item.product.size}}</td>
+                                            <td>{{item.quantity}}</td>
+                                            <td>{{ item.total_price }} FCFA</td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                     <tfoot class="font-weight-600">
                                         <tr>
                                             <td colspan="4" class="text-right">Shipping </td>
-                                            <td>$50.00</td>
+                                            <td>{{item.totalCost}}FCFA</td>
                                         </tr>
                                         <tr>
                                             <td colspan="4" class="text-right">Total</td>
-                                            <td>$845.00</td>
+                                            <td> {{ cart_total_price }} FCFA</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -308,6 +313,13 @@ Checkout
                                         <button class="btn" value="Place order" type="submit">Payer Stripe</button>  
                                     </form>
                                      {% comment %} paiement stripe {% endcomment %}
+                                    <a href=""> <button class="button is-primary" id="submitBtn">Purchase!</button></a>
+
+                                    <form  method="POST" action="{% url 'Ecommerce:process' %}">
+                                        {% csrf_token %} 
+            
+                                       <button class="btn" value="NotchPay" type="submit">Payer NotchPay</button>  
+                                   </form>
                                 </div>
                             </div>
                         </div>
@@ -365,5 +377,11 @@ Checkout
           }
         });
       });
+
+
+
+
+
+      
 
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Livraison, Cart, BillingDetails, Order
+from .models import Category, Product, Livraison, Cart, BillingDetails, Order, Newsletters
 
 # Register your models here.
 
@@ -17,17 +17,17 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
-# class OrderItemInline(admin.TabularInline):
-#     model = OrderItem
-#     raw_id_fields = ['product']
+class BillingDetailsInline(admin.TabularInline):
+    model = BillingDetails
+    raw_id_fields = ['product']
 
 # @admin.register(Order)
-# class OrderAdmin(admin.ModelAdmin):
-#     list_display = ['id', 'first_name', 'last_name', 'email',
-#                     'address', 'phone', 'company', 'apartment', 'post_code', 'city', 'paid',
-#                     'created', 'updated']
-#     list_filter = ['paid', 'created', 'updated']
-#     inlines = [OrderItemInline]
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'first_name', 'last_name', 'email',
+                    'address', 'phone', 'company', 'apartment', 'post_code', 'city', 'paid',
+                    'created', 'updated']
+    list_filter = ['created', 'updated']
+    inlines = [BillingDetailsInline]
 
 
 from .models import Coupon
@@ -50,5 +50,9 @@ class CartAdmin(admin.ModelAdmin):
 admin.site.register(Cart, CartAdmin)
 admin.site.register(BillingDetails)
 admin.site.register(Order)
+
+@admin.register(Newsletters)
+class NewslettersAdmin(admin.ModelAdmin):
+    list_display = ['email', 'created']
 
 

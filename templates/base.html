@@ -8,7 +8,7 @@ Home
 <!--Search Form Drawer-->
 <div class="search">
     <div class="search__form">
-        <form class="search-bar__form" action="#">
+        <form class="search-bar__form" action="{% url "Ecommerce:search" %}" method="GET">
             <button class="go-btn search__button" type="submit"><i class="icon anm anm-search-l"></i></button>
             <input class="search__input" type="search" name="q" value="" placeholder="Search entire store..." aria-label="Search" autocomplete="off">
         </form>
@@ -131,27 +131,41 @@ Home
                 	<div class="site-cart">
                     	<a href="#;" class="site-header__cart" title="Cart">
                         	<i class="icon anm anm-bag-l"></i>
-                            <span id="CartCount" class="site-header__cart-count" data-cart-render="item_count">{{ total_quantity }}</span>
+                            <span id="CartCount" class="site-header__cart-count" data-cart-render="item_count"> {{totalitem}}</span>
                         </a>
                         <!--Minicart Popup-->
-                        <div id="header-cart" class="block block-cart">
-                            {% for item in cart_items %}
+                        <div id="header-cart" class="block block-cart"> 
+                            {% for item in carts %}
                         	<ul class="mini-products-list">
                                 <li class="item">
-                                	<a class="product-image" href="#">
+                                    
+                                	<a class="product-image" href="{{ product.get_absolute_url }}">
                                     	<img src="{{ item.product.image1.url }}" alt="3/4 Sleeve Kimono Dress" title="" />
                                     </a>
                                     <div class="product-details">
-                                    	<a href="#" class="remove"><i class="anm anm-times-l" aria-hidden="true"></i></a>
+                                    	<a href="#" class="remove">
+                                            <form action="{% url "Ecommerce:delete_cart_item" item.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button class="bg-transparent" type="submit">
+                                                    <i class="fa fa-trash text-danger"></i>
+                                                </button>
+                                            </form>
+                            
+                                        </a>
                                         <a href="#" class="edit-i remove"><i class="anm anm-edit" aria-hidden="true"></i></a>
                                         <a class="pName" href="cart.html">{{ item.product.name }}</a>
-                                        <div class="variant-cart">Black / XL</div>
+                                        <div class="variant-cart">Black / {{ item.product.size }}</div>
                                         <div class="wrapQtyBtn">
                                             <div class="qtyField">
                                             	<span class="label">Qty:</span>
-                                                <a class="qtyBtn minus" href="javascript:void(0);"><i class="fa anm anm-minus-r" aria-hidden="true"></i></a>
-                                                <input type="text" id="Quantity" name="quantity" value="1" class="product-form__input qty">
-                                                <a class="qtyBtn plus" href="javascript:void(0);"><i class="fa anm anm-plus-r" aria-hidden="true"></i></a>
+                                                <form action="{% url "Ecommerce:cart_quantity" item.id %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="mb-3 d-flex">
+                                                        <button type="submit" class="decrease px-2">-</button>
+                                                        <input style="width: 30px;" name="quantity" type="text" value="{{ item.quantity }}" class="quantity text-center border-0" />
+                                                        <button type="submit" class="increase px-2">+</button>
+                                                    </div>
+                                            </form>
                                             </div>
                                         </div>
                                         <div class="priceRow">
@@ -165,11 +179,13 @@ Home
                             {% endfor %}
                             <div class="total">
                             	<div class="total-in">
-                                	<span class="label">Cart Subtotal:</span><span class="product-price"><span class="money">{{ subtotal }} FCFA</span></span>
+                                   
+                                	<span class="label">Cart Subtotal:</span><span class="product-price"><span class="money"> {{ cart_total_price }} FCFA</span></span>
+                                    
                                 </div>
                                  <div class="buttonSet text-center">
-                                    <a href="" class="btn btn-secondary btn--small">View Cart</a>
-                                    <a href="checkout.html" class="btn btn-secondary btn--small">Checkout</a>
+                                    <a href="{% url "Ecommerce:cart_list" %}" class="btn btn-secondary btn--small">View Cart</a>
+                                    <a href="{% url 'Ecommerce:checkout' %}" class="btn btn-secondary btn--small">Checkout</a>
                                 </div>
                             </div>
                             
@@ -292,14 +308,15 @@ Home
                                         <!--start product details -->
                                         <div class="product-details text-center">
                                             <!-- product name -->
+                                            <a href="#" class="btn">Pay Now</a>
                                             <div class="product-name">
-                                                <a href="short-description.html">{{ product.name }}</a>
+                                                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
                                             </div>
                                             <!-- End product name -->
                                             <!-- product price -->
                                             <div class="product-price">
-                                                <span class="old-price">{{ product.price }} FCFA</span>
-                                                <span class="price">{{ product.priceReduction }} FCFA</span>
+                                                <span class="old-price">{{ product.priceReduction }}FCFA</span>
+                                                <span class="price">{{ product.price }}FCFA</span>
                                             </div>
                                             <!-- End product price -->
                                             
@@ -1092,4 +1109,29 @@ Home
     <!--End Store Feature-->
 </div>
    <!--End Body Content-->
+
+   <script>
+    // Get all the increase and decrease buttons and the quantity inputs
+    const increaseButtons = document.querySelectorAll('.increase');
+    const decreaseButtons = document.querySelectorAll('.decrease');
+    const quantityInputs = document.querySelectorAll('.quantity');
+    
+    // Add click event listeners to all the buttons
+    increaseButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            let currentQuantity = parseInt(quantityInputs[index].value);
+            quantityInputs[index].value = currentQuantity + 1;
+        });
+    });
+    
+    decreaseButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            let currentQuantity = parseInt(quantityInputs[index].value);
+            // Ensure quantity doesn't go below 1
+            if (currentQuantity > 1) {
+                quantityInputs[index].value = currentQuantity - 1;
+            }
+        });
+    });
+</script>
 {% endblock %}

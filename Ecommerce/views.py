@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from .models import Category, Product, Coupon, Wishlist, Livraison, Cart
+from .models import Category, Product, Coupon, Wishlist, Livraison, Cart, Newsletters, Order, BillingDetails
 # CartItem
+from django.db.models import Q
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
@@ -13,14 +14,18 @@ from django.views.decorators.http import require_POST
 from .forms import CartAddProductForm, CouponApplyForm
 # from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
 from django.http import HttpResponse, JsonResponse
-
+import requests 
 import stripe
 # from accountss.models import User
 from django.utils.translation import gettext_lazy as _
+from .forms import BillingDetailsForm, NewlettersForm
 # import random
 # import string
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+notchpay = settings.NOTCHPAY_SECRET_KEY
+
 
 # Create your views here.
 
@@ -30,14 +35,21 @@ def index(request, category_slug=None):
     category = None
     categories = Category.objects.all()
     product1 = Product.objects.filter(available=True).order_by('created')[:5]
-    # products = Product.objects.filter(available=True)
+    # product7 = Product.objects.filter(available=True)
     product2 = Product.objects.all().order_by('created')[5:10]
     product3 = Product.objects.all().order_by('created')[10:15]
     # products = Product.objects.all[0:4](available=True)
+    totalitem = 0
+    carts = Cart.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+            totalitem = len(Cart.objects.filter(user=request.user))
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         products = products.filter(category=category)
-    context = {'category': category, 'categories': categories, 'product1': product1, 'product2': product2, 'product3': product3}
+    cart_total_price = 0
+    for cart in carts:
+        cart_total_price += cart.total_price
+    context = {'category': category, 'categories': categories, 'product1': product1, 'product2': product2, 'product3': product3, 'totalitem': totalitem, 'carts': carts, 'cart_total_price': cart_total_price}
     #  'total_quantity': total_quantity, 'subtotal': subtotal, 'total': total, 'cart_items': cart_items}
     return render(request, 'base.html', context)
 
@@ -59,6 +71,17 @@ def terms(request):
 
 def error_404_view(request, exception):
     return render(request, '404.html')
+
+def newsletter(request):
+    if request.method == 'POST':
+        form = NewlettersForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('Ecommerce:home')
+    else:
+        form = NewlettersForm()
+    return render(request, 'base.html', {'form': form})
+        
 
 # class HomeView(ListView):
 #     model = Item
@@ -100,6 +123,28 @@ def product_detail(request, id, slug):
     cart_product_form = CartAddProductForm()
     context = {'product': product, 'cart_product_form': cart_product_form}
     return render(request, 'detail.html', context)
+
+def search(request, category_slug=None):
+    category = None
+    categories = Category.objects.all()
+    products = Product.objects.all()
+    if request.method == "GET":
+        name = request.GET.get("q")
+        if name is not None:
+            products = Product.objects.filter(Q(name__icontains=name) | Q(price__icontains=name))
+    # products = Product.objects.all[0:4](available=True)
+    totalitem = 0
+    carts = Cart.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+            totalitem = len(Cart.objects.filter(user=request.user))
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        products = products.filter(category=category)
+    cart_total_price = 0
+    for cart in carts:
+        cart_total_price += cart.total_price
+    context = {'category': category, 'categories': categories, 'products': products, 'totalitem': totalitem, 'carts': carts}
+    return render(request, 'search.html', context)
 
 
 # class ProductDetialView(generic.DetailView):
@@ -172,19 +217,19 @@ def product_detail(request, id, slug):
 #     coupon_apply_form = CouponApplyForm()
 #     return render(request, 'cart/cart.html', {'cart': cart, 'coupon_apply_form': coupon_apply_form})
 
-@login_required
+# @login_required
 def view_wishlist(request):
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
     return render (request, 'wishlist.html', {'wishlist': wishlist})
 
-@login_required
+# @login_required
 def add_to_wishlist(request, product_id):
     product = Product.objects.get(id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
     wishlist.products.add(product)
-    return redirect ('/wishlist/', product_id=product_id)
+    return redirect ('/wishlist/', product_id=product_id) 
 
-@login_required
+# @login_required
 def remove_from_wishlist(request, product_id):
     product = Product.objects.get(id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
@@ -242,9 +287,17 @@ def choix_livraison(request):
 
 @login_required
 def checkout(request):
+    # orders = Order.objects.create(user=request.user)
     stripe.api_key = settings.STRIPE_SECRET_KEY
     intent = stripe.PaymentIntent.create(amount=1000, currency='usd',)
-    return render(request, 'checkout.html', {'client_secret': stripe.api_key})
+    totalitem = 0
+    carts = Cart.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+            totalitem = len(Cart.objects.filter(user=request.user)) 
+    cart_total_price = 0
+    for cart in carts:
+        cart_total_price += cart.total_price
+    return render(request, 'checkout.html', {'client_secret': stripe.api_key, 'totalitem': totalitem, 'carts':carts, 'cart_total_price': cart_total_price})
 
 def charge(request):
     if request.method =='POST':
@@ -313,3 +366,182 @@ def delete_cart_item(request, cart_id):
     if request.method == 'POST':
         cart.delete()
     return redirect('Ecommerce:cart_list')
+
+def success(request):
+    return render(request, "paysuccess.html")
+
+def cancel(request):
+    return render(request, "paycancel.html")
+
+
+def order(request):
+    cart = Cart.objects.filter(user=request.user)
+    user = request.user
+    try:
+        billing_info = BillingDetails.objects.get(user=user)
+    except BillingDetails.DoesNotExist:
+        billing_info = None
+
+    if request.method == 'POST':
+        form = BillingDetailsForm(request.POST, instance=billing_info)
+        if form.is_valid():
+            billing_instance = form.save(commit=False)
+            billing_instance.user = user
+            billing_instance.save()
+            return redirect('Ecommerce:home')
+            for item in cart:
+                Order.objects.create(order=order, product=item['product'],
+                                         price=item['price'], quantity=item['quantity'])
+            # clear the cart
+            cart.clear()
+            return render(request, 'order/create.html', {'order': order})
+    else:
+        form = BillingDetailsForm(instance=billing_info)
+    return render(request, 'order/create.html', {'cart': cart, 'form': form})
+
+
+
+from django.http.response import JsonResponse # new
+from django.views.decorators.csrf import csrf_exempt # new
+
+
+
+
+# new
+@csrf_exempt
+def stripe_config(request):
+    if request.method == 'GET':
+        stripe_config = {'publicKey': settings.STRIPE_PUBLIC_KEY}
+        return JsonResponse(stripe_config, safe=False)
+
+@csrf_exempt
+def create_checkout_session(request):
+    if request.method == 'GET':
+        domain_url = 'http://localhost:8000/'
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        try:
+         
+            # For full details see https://stripe.com/docs/api/checkout/sessions/create
+
+            # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
+            checkout_session = stripe.checkout.Session.create(
+                # success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
+                # cancel_url=domain_url + 'cancelled/',
+                success_url=settings.PAYMENT_SUCCESS_URL,
+                cancel_url=settings.PAYMENT_CANCEL_URL,
+                payment_method_types=['card'],
+                mode='payment',
+                line_items=[
+                    {
+                        'name': 'T-shirt',
+                        'quantity': 1,
+                        'currency': 'usd',
+                        'amount': '2000',
+                    }
+                ]
+            )
+            return JsonResponse({'sessionId': checkout_session['id']})
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
+
+    #  $payload = Payment::initialize([
+    #             'amount' => $product->price,
+    #             'email' => Auth::user()->email,
+    #             'name' => Auth::user()->name,
+    #             'currency' => 'XAF',
+    #             'reference' => Auth::id() . '-' . uniqid(), 
+    #             'callback' => route('notchpay-callback'),
+    #             'description' => $product->description,
+    #         ]); 
+
+    #    try {
+    #         $payload = Payment::initialize([
+    #             // 'amount' => $product->price,
+    #             'amount' => $subtotal,
+    #             'email' => Auth::user()->email,
+    #             'name' => Auth::user()->name,
+    #             'currency' => 'XAF',
+    #             'reference' => Auth::id() . '-' . uniqid(), 
+    #             'callback' => route('notchpay-callback'),
+    #             'description' => $product->description,
+    #         ]);
+
+    # // sb.Cdo6b4O77BATFtsPUCxlp3buDWtAjqQSV7hXX8fHSBkXC724BO9ncKwxKGfUIqQpsoYojcFYqJAr6GjfUgJ0XVGw1mEI2I4zg00bzfHx8K5mynoKRMXLNiwDLGTyw
+
+@login_required
+def process(request):
+    # product = get_object_or_404(Product, pk=product_id)
+    # description = product.description
+    # price = product.price
+    carts = Cart.objects.filter(user=request.user)
+    email= request.user.email
+    cart_total_price = 0
+    for cart in carts:
+        cart_total_price += cart.total_price
+    amount = cart_total_price
+    # amount = 5000
+    currency = 'XAF'
+    description = "achat via Notchpay"
+    # email = "customer@email.com"
+    # phone = 655728267
+
+    api_url = 'https://api.notchpay.co/payments/initialize'
+    headers = {
+        'Authorization': f'{'sb.Cdo6b4O77BATFtsPUCxlp3buDWtAjqQSV7hXX8fHSBkXC724BO9ncKwxKGfUIqQpsoYojcFYqJAr6GjfUgJ0XVGw1mEI2I4zg00bzfHx8K5mynoKRMXLNiwDLGTyw'}'
+    }
+
+    data = {
+        'amount' : amount,
+        'currency' : currency,
+        'description' : description, 
+        'email' : email,
+        # 'phone' : phone
+    }
+
+    response = requests.post(api_url, data=data, headers=headers)
+    if response.status_code == 201:
+        # return JsonResponse({'message': 'paiement réussi'})
+        # api = response.json()
+        api = response.text
+        # print(api)
+    # return HttpResponse (api)
+        return render(request, 'paysuccess.html', {'api': api})
+    else:
+        # return JsonResponse({'error': 'Erreur lors du paiment'})
+        return render(request, 'paycancel.html')
+
+
+
+# class CreateStripeCheckoutSessionView(View):
+    """
+    Create a checkout session and redirect the user to Stripe's checkout page
+    """
+
+    def post(self, request, *args, **kwargs):
+        price = Product.objects.get(id=self.kwargs["pk"])
+
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=[
+                {
+                    "price_data": {
+                        "currency": "usd",
+                        "unit_amount": int(product.price) * 100,
+                        "product_data": {
+                            "name": product.name,
+                            "description": product.description,
+                            "images": [
+                                f"{settings.BACKEND_DOMAIN}/{product.image1}"
+                            ],
+                        },
+                    },
+                    "quantity": product.quantity,
+                }
+            ],
+            metadata={"product_id": product.id},
+            mode="payment",
+            success_url=settings.PAYMENT_SUCCESS_URL,
+            cancel_url=settings.PAYMENT_CANCEL_URL,
+        )
+        return redirect('Ecommerce:cart_list')

@@ -14,9 +14,11 @@ from pathlib import Path
 import os
 from decouple import config #new
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -50,7 +52,7 @@ INSTALLED_APPS = [
     # 'social_core',
     'captcha',
     'accountss',
-    'Ecommerce',
+    'Ecommerce.apps.EcommerceConfig',
     'cart.apps.CartConfig',
     # 'djstripe', 
     'crispy_forms',
@@ -91,7 +93,9 @@ TEMPLATES = [
                 # 'social_django.context_processors.backends', #new
                 # 'social_django.context_processors.login_redirect', #new
                 'cart.context_processors.cart', #new
+                'Ecommerce.context_processors.totalitem', #new
                 # 'django.core.context_processors.i18n', #new
+               
 
             ],
         },
@@ -142,6 +146,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+# USE_L10N = True #new
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -170,7 +176,8 @@ CART_SESSION_ID = 'cart'
 
 LOGIN_URL = 'accountss:login'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = 'welcome'
+LOGOUT_REDIRECT_URL = 'accountss:welcome'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'accountss:welcome'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #new
 
@@ -217,7 +224,15 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': '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',
             'key': ''
         }
+
+        
+        # 'APPS': {
+        #     'client_id': '123',
+        #     'secret': '456',
+        #     'key': ''
+        # }
     },
+
 
     'github': {
         # For each OAuth based provider, either add a ``SocialApp``
@@ -225,46 +240,55 @@ SOCIALACCOUNT_PROVIDERS = {
         # credentials, or list them here:
         
          'SCOPE': [
-            'profile',
-            'email',
+            'user',
+            'repo',
+            'read:org',
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
+        # 'AUTH_PARAMS': {
+        #     'access_type': 'online',
+        # },
 
 
-        'APP': {
-            'client_id': '9e85d9492e25f149252b',
-            'secret': 'f190d24327ee5ffdc6063caf02b4590f9cf586ed',
-            'key': ''
-        }
+        # 'APP': {
+        #     'client_id': '9e85d9492e25f149252b',
+        #     'secret': 'f190d24327ee5ffdc6063caf02b4590f9cf586ed',
+        #     'key': ''
+        # }
     },
 
     'facebook': {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
+
+        'METHOD' : 'oauth2',
         
          'SCOPE': [
-            'profile',
             'email',
+            'public_profile'
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
+
+        # 'AUTH_PARAMS': {
+        #     'auth_type': 'reauthentificate',
+        # },
+
+        # 'EXCHANGE_TOKEN': True,
+        # 'VERIFIED_EMAIL': False,
 
 
-        'APP': {
-            'client_id': '701820614848473',
-            'secret': '58ee2658c1903c398f2dc9c215a1111f',
-            'key': ''
-        }
+        # 'APPS': {
+        #     'client_id': '701820614848473',
+        #     'secret': '58ee2658c1903c398f2dc9c215a1111f',
+        #     'key': ''
+        # }
     }
 }
 
 # ACCOUNT_LOGIN_ON_GET=True
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+# ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_SESSION_REMEMBER = True
+SOCIALACCOUNT_QUERY_EMAIL = True
 
 SITE_ID = 1
 
@@ -278,7 +302,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
     ]
 
-ACCOUNT_EMAIL_REQUIRED = False #new
+ACCOUNT_EMAIL_REQUIRED = True #new
 
 # http://127.0.0.1:8000/google/login/callback
 # http://127.0.0.1:8000/google/
@@ -301,9 +325,20 @@ STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 
 
-# LANGUAGES = [
-#     ('en', _('English')),
-#     ('fr', _('French')),
-# ]
+NOTCHPAY_SECRET_KEY = 'sb.Cdo6b4O77BATFtsPUCxlp3buDWtAjqQSV7hXX8fHSBkXC724BO9ncKwxKGfUIqQpsoYojcFYqJAr6GjfUgJ0XVGw1mEI2I4zg00bzfHx8K5mynoKRMXLNiwDLGTyw'
+
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('fr', _('French')),
+]
 
 # AUTH_USER_MODEL = 'accountss.User'
+
+
+BACKEND_DOMAIN="http://127.0.0.1:8000"
+PAYMENT_SUCCESS_URL="http://127.0.0.1:8000/success/"
+PAYMENT_CANCEL_URL="http://127.0.0.1:8000/cancel/"
+
+
+# gettext_bin = '/usr/bin/msgfmt'

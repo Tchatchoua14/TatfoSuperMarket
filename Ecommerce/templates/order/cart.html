@@ -32,7 +32,7 @@ Cart
                             </thead>
                     		<tbody> 
                                 
-                                {% for item in carts %}
+                                {% for item in carts %} 
                                 <tr class="cart__row border-bottom line1 cart-flex border-top">
                                     <td class="cart__image-wrapper cart-flex-item">
                                         <a href="#"><img class="cart__image" src="{{ item.product.image1.url }}" alt="Elastic Waist Dress - Navy / Small"></a>
@@ -43,7 +43,7 @@ Cart
                                         </div>
                                         
                                         <div class="cart__meta-text">
-                                            Color: Navy<br>Size: <br>
+                                            Color: Navy<br>Size: {{ item.product.size }}<br>
                                         </div>
                                     </td>
                                     <td class="cart__price-wrapper cart-flex-item">
@@ -355,7 +355,7 @@ Cart
                     <div class="solid-border">
                       <div class="row">
                       	<span class="col-12 col-sm-6 cart__subtotal-title"><strong>Subtotal</strong></span>
-                        <span class="col-12 col-sm-6 cart__subtotal-title cart__subtotal text-right"><span class="money"> {{ cart_total_price }} FCFA</span></span>
+                        <span class="col-12 col-sm-6 cart__subtotal-title cart__subtotal text-right"><span class="money"> {{ cart_total_price }} FCFA </span></span>
                       </div>
                       <div class="cart__shipping">Shipping &amp; taxes calculated at checkout</div>
                       <p class="cart_tearm">
@@ -366,6 +366,7 @@ Cart
                       </p>
                       <a href="{% url 'Ecommerce:checkout' %}"> <button name="checkout" id="cartCheckout" class="btn btn--small-wide checkout">checkout</button></a>
                       <div class="paymnet-img"><img src="assets/images/payment-img.jpg" alt="Payment"></div>
+                      <a href=""> <button class="button is-primary" id="submitBtn">Purchase!</button></a>
                     </div>
 
                 </div> 
@@ -376,7 +377,7 @@ Cart
     <!--End Body Content-->
 
 
-
+    <script src="https://js.stripe.com/v3/"></script>  <!-- new -->
     <script>
         // Get all the increase and decrease buttons and the quantity inputs
         const increaseButtons = document.querySelectorAll('.increase');

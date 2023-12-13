@@ -132,6 +132,7 @@ class Cart(models.Model):
         return f"{self.user.username}'s cart"
 
 class BillingDetails(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -146,7 +147,7 @@ class BillingDetails(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user}'s billing"
+        return f"{self.user.username}'s billing"
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -154,4 +155,11 @@ class Order(models.Model):
     billing = models.ForeignKey(BillingDetails, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user}'s order"
+        return f"{self.user.username}'s order"
+
+class Newsletters(models.Model):
+    email = models.EmailField(unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

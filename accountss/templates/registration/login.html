@@ -6,7 +6,7 @@ Login
 {% block content %}
 {% include 'partials/header.html' %}
 {% include 'partials/menu.html' %}
-{% comment %} {% load socialaccount %} {% endcomment %}
+{% load socialaccount %}
 {% comment %} {% providers_media_js %} {% endcomment %}
 
      <!--Body Content-->
@@ -77,14 +77,14 @@ Login
                               
                                 </p>
                             </div>
-                         </div>
+                         </div> 
                          <div class="row">
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="text-center px-4">
                                     <a href="#" class="mr-2" style="text-decoration: none; pointer-events:none;">Sign In with</a>
-                                    {% comment %} <a href="{% provider_login_url 'google' %}" class="google-sign-in mr-2"><i class="fa fa-google text-danger"></i>  Google</a> &nbsp; | &nbsp;
+                                    <a href="{% provider_login_url 'google' %}" class="google-sign-in mr-2"><i class="fa fa-google text-danger"></i>  Google</a> &nbsp; | &nbsp;
                                     <a href="{% provider_login_url 'github' %}" class="github-sign-in"><i class="fa fa-github"></i>  Github</a> &nbsp; | &nbsp;
-                                    <a href="{% provider_login_url 'facebook' %}" class="facebook-sign-in ml-2"><i class="fa fa-facebook text-primary"></i>  Facebook</a> {% endcomment %}
+                                    <a href="{% provider_login_url 'facebook' method="oauth2" %}" class="facebook-sign-in ml-2"><i class="fa fa-facebook text-primary"></i>  Facebook</a> 
                                 </div>
                             </div>
                          </div>

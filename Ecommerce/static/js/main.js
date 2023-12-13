@@ -102,6 +102,9 @@
 		});
 	}
 	language_dropdown();
+
+		// new
+	// Get Stripe publishable key
 	
 	/*-----------------------------------------
 	  5. Top Links Show/Hide dropdown ---------
