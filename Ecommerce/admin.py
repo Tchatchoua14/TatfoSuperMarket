@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Livraison, Cart, BillingDetails, Order, Newsletters
+from .models import Category, Product, Livraison, Cart, BillingDetails, Order, Newsletters, Verification
 
 # Register your models here.
 
@@ -55,4 +55,6 @@ admin.site.register(Order)
 class NewslettersAdmin(admin.ModelAdmin):
     list_display = ['email', 'created']
 
-
+@admin.register(Verification)
+class VerificationAdmin(admin.ModelAdmin,):
+	list_display = ['id', 'token','user', 'verify']

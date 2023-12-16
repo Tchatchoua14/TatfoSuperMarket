@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from accountss.forms import RegisterForm, CustomLoginForm, UserUpdateForm, ProfileUpdateForm
+from Ecommerce.views import send_email_after_registration
+from Ecommerce.models import Verification
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -9,7 +11,7 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView,
     PasswordResetConfirmView,
     PasswordResetView,
-     PasswordResetDoneView,
+     PasswordResetDoneView, 
     LoginView)
 from django.views.generic import CreateView, TemplateView
 from django.contrib.auth.models import User
@@ -17,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from django.views import View
+import uuid
 from captcha.fields import ReCaptchaField
 # from cart.forms import CartAddProductForm
 # from .models import Category, Product
@@ -32,11 +35,29 @@ class RegisterView(FormView):
     form_class = RegisterForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('Ecommerce:home')
+
+    # def post(self, request):
+    #     form = CustomerRegistrationForm(request.POST)
+    #     if form.is_valid():
+    #         new_user = form.save()
+    #         uid = uuid.uuid4()
+    #         pro_obj = Verification(user=new_user, token=uid)
+    #         pro_obj.save()
+    #         send_email_after_registration(new_user.email, uid)
+    #         messages.success(request, "Your Account Created Successful, To Verifi your account Check your email.")
+    #         return render(request, 'app/customerregistration.html', {'form': form})
+    # return render(request, 'app/customerregistration.html', {'form': form})
     
     def form_valid(self, form):
         user = form.save()
+        # uid = uuid.uuid4()
+        # pro_obj = Verification(user=user, token=uid)
+        # pro_obj.save()
+        # send_email_after_registration(user.email, uid)
+        # messages.success(request, "Your Account Created Successful, To Verifi your account Check your email.")
         if user is not None:
-            login(self.request, user)
+            login(self.request, user, backend = 'django.contrib.auth.backends.ModelBackend')
+            # user.backend = 'django.contrib.auth.backends.ModelBackend'
             
         return super(RegisterView, self).form_valid(form)
 
@@ -79,7 +100,7 @@ class UserLoginView(LoginView):
 
 def logout_view(request):
     logout(request)
-    return redirect(reverse('accountss:login'))
+    return redirect(reverse('accountss:welcome'))
 
 class MyPasswordChangeView(PasswordChangeView):
     template_name = 'registration/password_change.html'

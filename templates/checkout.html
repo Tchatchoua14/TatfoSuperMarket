@@ -59,10 +59,14 @@ Checkout
                         <div id="have-coupon" class="collapse coupon-checkout-content">
                             <div class="discount-coupon">
                                 <div id="coupon" class="coupon-dec tab-pane active">
+                                    <form  method="post" action="{% url 'Ecommerce:apply' %}">
+                                        {% csrf_token %}
                                     <p class="margin-10px-bottom">Enter your coupon code if you have one.</p>
                                     <label class="required get" for="coupon-code"><span class="required-f">*</span> Coupon</label>
                                     <input id="coupon-code" required="" type="text" class="mb-3">
+                                    {{ form.as_p }} 
                                     <button class="coupon-btn btn" type="submit">Apply Coupon</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -207,11 +211,11 @@ Checkout
                                     <tfoot class="font-weight-600">
                                         <tr>
                                             <td colspan="4" class="text-right">Shipping </td>
-                                            <td>{{item.totalCost}}FCFA</td>
+                                            <td>{{ shipping_amount }}FCFA</td>
                                         </tr>
                                         <tr>
                                             <td colspan="4" class="text-right">Total</td>
-                                            <td> {{ cart_total_price }} FCFA</td>
+                                            <td>{{ cart_total }} FCFA</td>
                                         </tr>
                                     </tfoot>
                                 </table>

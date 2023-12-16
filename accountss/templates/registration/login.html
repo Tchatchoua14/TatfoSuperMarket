@@ -25,18 +25,16 @@ Login
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 main-col offset-md-3 d-flex blur justify-content-center shadow-lg my-sm-0 my-sm-6 mt-5 mb-5">
                 	<div class="mb-4 mt-4">
                         {% if messages %}
-                           
-                        {% for message in messages %}
-                         <div class="mb-4 font-medium text-sm text-green-600">
-                             {{ message }}
-                         </div>
+                        {% for messages in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert"><strong>{{messages}}</strong> 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+                        </div>
                         {% endfor %}
+                        {% endif %}
 
-                     {% endif %}
-
-                        {%if error%}
-                          <div class="alert alert-danger" role="alert">
-                           {{error}}
+                        {% if error %}
+                           <div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>{{error}}</strong> 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
                            </div>
                         {%endif%}
                        <form method="POST" action="">

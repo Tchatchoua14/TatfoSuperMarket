@@ -30,6 +30,15 @@ SECRET_KEY = 'django-insecure-^p&fn33z_8)+3zz%4v!yy3$d2^n&l5a&(sozq*k^7y+6=3&1tf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
+
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = config('DEBUG', default=True, cast=bool)
+
+
+# # load production server from .env
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
+
 ALLOWED_HOSTS = []
 
 
@@ -45,6 +54,9 @@ INSTALLED_APPS = [
     'django.contrib.sites', #new
     # 'order.apps.OrderConfig',
     # 'corsheaders',
+    # 'rest_framework',  # new
+    # 'corsheaders',  # new 
+    # 'rest_framework_swagger', # new
     'coupons.apps.CouponsConfig',
     'allauth',
     'allauth.account',
@@ -187,8 +199,8 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_USE_TLS = True
 # EMAIL_PORT = 587
-# EMAIL_HOST_USER = "vinyassou@yahoo.fr"
-# EMAIL_HOST_PASSWORD = "vinyassou"
+# EMAIL_HOST_USER = "Tchatchouaviny@yahoo.fr"
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
 MESSAGE_TAGS = {
@@ -219,18 +231,18 @@ SOCIALACCOUNT_PROVIDERS = {
         },
 
 
-        'APP': {
-            'client_id': '574111392765-150nfpg6sn2dql8o0m78j2cfqduuu7an.apps.googleusercontent.com',
-            'secret': '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',
-            'key': ''
-        }
-
-        
-        # 'APPS': {
-        #     'client_id': '123',
-        #     'secret': '456',
+        # 'APP': {
+        #     'client_id': '574111392765-150nfpg6sn2dql8o0m78j2cfqduuu7an.apps.googleusercontent.com',
+        #     'secret': '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',
         #     'key': ''
         # }
+
+        
+        'APPS': {
+            'client_id': '123',
+            'secret': '456',
+            'key': ''
+        }
     },
 
 
@@ -322,10 +334,10 @@ SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = config('SOCIAL_AUTH_FACEBOOK_SECRET')
 
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
-STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY') 
 
 
-NOTCHPAY_SECRET_KEY = 'sb.Cdo6b4O77BATFtsPUCxlp3buDWtAjqQSV7hXX8fHSBkXC724BO9ncKwxKGfUIqQpsoYojcFYqJAr6GjfUgJ0XVGw1mEI2I4zg00bzfHx8K5mynoKRMXLNiwDLGTyw'
+NOTCHPAY_SECRET_KEY = config('NOTCHPAY_SECRET_KEY')
 
 
 LANGUAGES = [
@@ -342,3 +354,15 @@ PAYMENT_CANCEL_URL="http://127.0.0.1:8000/cancel/"
 
 
 # gettext_bin = '/usr/bin/msgfmt'
+
+
+# REST_FRAMEWORK = {
+#     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated",],
+#     "DEFAULT_AUTHENTICATION_CLASSES": [
+#         # "rest_framework_simplejwt.authentication.JWTAuthentication",
+#         "rest_framework.authentication.SessionAuthentication",
+#     ],
+#     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser",],
+#     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema", #new
+# }
+

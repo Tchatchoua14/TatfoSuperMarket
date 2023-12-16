@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
+# from rest_framework_swagger.views import get_swagger_view
+
+# schema_view = get_swagger_view(title="Notes API")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +33,9 @@ urlpatterns = [
     # re_path('accounts/', include('social_django.urls', namespace='social')),
     # path('social-auth/', include('social_django.urls', namespace='social')),
     #path('order/', include('order.urls', namespace='order')),
+    #     path('auth/', include('rest_framework.urls')),
+    # path('api/jwtauth/', include('jwtauth.urls'), name='jwtauth'),
+    # path('api/docs/', schema_view),
 ]
 
 #handling the 404 error

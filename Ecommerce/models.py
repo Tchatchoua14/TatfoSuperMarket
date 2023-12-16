@@ -163,3 +163,8 @@ class Newsletters(models.Model):
 
     def __str__(self):
         return self.email
+
+class Verification(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	token = models.CharField(max_length=150)
+	verify = models.BooleanField(default=False)

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from .models import Category, Product, Coupon, Wishlist, Livraison, Cart, Newsletters, Order, BillingDetails
+from .models import Category, Product, Coupon, Wishlist, Livraison, Cart, Newsletters, Order, BillingDetails, Verification
 # CartItem
 from django.db.models import Q
 from django.contrib import messages
@@ -11,11 +11,13 @@ from django.views.generic import ListView, DetailView, View
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 # from .cart import Cart
+from django.core.mail import send_mail
 from .forms import CartAddProductForm, CouponApplyForm
 # from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
 from django.http import HttpResponse, JsonResponse
 import requests 
 import stripe
+import uuid
 # from accountss.models import User
 from django.utils.translation import gettext_lazy as _
 from .forms import BillingDetailsForm, NewlettersForm
@@ -178,21 +180,21 @@ def search(request, category_slug=None):
 #     return render(request, 'order/create.html', {'cart': cart, 'form': form})
 
 
-# @require_POST
-# def coupon_apply(request):
-#     now = timezone.now()
-#     form = CouponApplyForm(request.POST)
-#     if form.is_valid():
-#         code = form.cleaned_data['code']
-#         try:
-#             coupon = Coupon.objects.get(code__iexact=code,
-#                                         valid_from__lte=now,
-#                                         valid_to__gte=now,
-#                                         active=True)
-#             request.session['coupon_id'] = coupon.id
-#         except Coupon.DoesNotExist:
-#             request.session['coupon_id'] = None
-#     return redirect('cart:cart_detail')
+@require_POST
+def coupon_apply(request):
+    now = timezone.now()
+    form = CouponApplyForm(request.POST)
+    if form.is_valid():
+        code = form.cleaned_data['code']
+        try:
+            coupon = Coupon.objects.get(code__iexact=code,
+                                        valid_from__lte=now,
+                                        valid_to__gte=now,
+                                        active=True)
+            request.session['coupon_id'] = coupon.id
+        except Coupon.DoesNotExist:
+            request.session['coupon_id'] = None
+    return redirect('Ecommerce:checkout')
 
 # @require_POST
 # def cart_add(request, product_id):
@@ -295,9 +297,11 @@ def checkout(request):
     if request.user.is_authenticated:
             totalitem = len(Cart.objects.filter(user=request.user)) 
     cart_total_price = 0
+    shipping_amount = 2000
     for cart in carts:
         cart_total_price += cart.total_price
-    return render(request, 'checkout.html', {'client_secret': stripe.api_key, 'totalitem': totalitem, 'carts':carts, 'cart_total_price': cart_total_price})
+        cart_total = cart_total_price + shipping_amount
+    return render(request, 'checkout.html', {'client_secret': stripe.api_key, 'totalitem': totalitem, 'carts':carts, 'cart_total_price': cart_total_price, 'cart_total': cart_total, 'shipping_amount': shipping_amount })
 
 def charge(request):
     if request.method =='POST':
@@ -488,7 +492,7 @@ def process(request):
 
     api_url = 'https://api.notchpay.co/payments/initialize'
     headers = {
-        'Authorization': f'{'sb.Cdo6b4O77BATFtsPUCxlp3buDWtAjqQSV7hXX8fHSBkXC724BO9ncKwxKGfUIqQpsoYojcFYqJAr6GjfUgJ0XVGw1mEI2I4zg00bzfHx8K5mynoKRMXLNiwDLGTyw'}'
+        'Authorization': f'{notchpay}'
     }
 
     data = {
@@ -501,12 +505,19 @@ def process(request):
 
     response = requests.post(api_url, data=data, headers=headers)
     if response.status_code == 201:
+        # authorization_url = "https://pay.notchpay.co/webcheckout/p.XpAviOtvFXpvuPPHp28Nv7W46NW00mYyryg0FBHDCSDzwGMZGre68OtIXJaVAfM6K3TAY20KyEXf9qV6Dc3FOSVQZ3jf1xTu"
+        # if authorization_url:
+        #     return redirect(authorization_url)
         # return JsonResponse({'message': 'paiement réussi'})
-        # api = response.json()
-        api = response.text
+        api = response.json()
+        # api = response.text
         # print(api)
     # return HttpResponse (api)
-        return render(request, 'paysuccess.html', {'api': api})
+        if 'authorization_url' in api:
+            authorization_url = api['authorization_url']
+            # print(authorization_url)
+            return redirect(authorization_url)
+        return render(request, 'paysuccess.html', {'authorization_url': authorization_url})
     else:
         # return JsonResponse({'error': 'Erreur lors du paiment'})
         return render(request, 'paycancel.html')
@@ -518,30 +529,66 @@ def process(request):
     Create a checkout session and redirect the user to Stripe's checkout page
     """
 
-    def post(self, request, *args, **kwargs):
-        price = Product.objects.get(id=self.kwargs["pk"])
+    # def post(self, request, *args, **kwargs):
+    #     price = Product.objects.get(id=self.kwargs["pk"])
 
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=["card"],
-            line_items=[
-                {
-                    "price_data": {
-                        "currency": "usd",
-                        "unit_amount": int(product.price) * 100,
-                        "product_data": {
-                            "name": product.name,
-                            "description": product.description,
-                            "images": [
-                                f"{settings.BACKEND_DOMAIN}/{product.image1}"
-                            ],
-                        },
-                    },
-                    "quantity": product.quantity,
-                }
-            ],
-            metadata={"product_id": product.id},
-            mode="payment",
-            success_url=settings.PAYMENT_SUCCESS_URL,
-            cancel_url=settings.PAYMENT_CANCEL_URL,
-        )
-        return redirect('Ecommerce:cart_list')
+    #     checkout_session = stripe.checkout.Session.create(
+    #         payment_method_types=["card"],
+    #         line_items=[
+    #             {
+    #                 "price_data": {
+    #                     "currency": "usd",
+    #                     "unit_amount": int(product.price) * 100,
+    #                     "product_data": {
+    #                         "name": product.name,
+    #                         "description": product.description,
+    #                         "images": [
+    #                             f"{settings.BACKEND_DOMAIN}/{product.image1}"
+    #                         ],
+    #                     },
+    #                 },
+    #                 "quantity": product.quantity,
+    #             }
+    #         ],
+    #         metadata={"product_id": product.id},
+    #         mode="payment",
+    #         success_url=settings.PAYMENT_SUCCESS_URL,
+    #         cancel_url=settings.PAYMENT_CANCEL_URL,
+    #     )
+    #     return redirect('Ecommerce:cart_list')
+
+
+def send_email_after_registration(email, token):
+    subject = "Verify Email"
+    message = f"""
+    Dear Sir/Madam,
+
+    ATTN : Please do not reply to this email.This mailbox is not monitored and you will not receive a response.
+
+    Your Verification Email is Given bellow 👇
+    Click on the link to verify your account https://http://127.0.0.1:8000/account-verify/{token}
+
+    If you have any queries, Please contact us at,
+
+    TatfoSuperMarket,
+    Tchatchoua, viny.
+    Phone # +237691167590
+    Email Id: Tchatchouaviny@yahoo.fr
+    Portfolio: assouviny.com.
+
+    Warm Regards,
+    TatfoMarket Store
+
+    """
+    print("\n\n")
+    print(message,"\n")
+    from_email = settings.EMAIL_HOST_USER 
+    recipient_list = [email]
+    send_mail(subject=subject, message=message, from_email=from_email, recipient_list=recipient_list)
+
+def account_verify(request, token):
+	pf = Verification.objects.filter(token=token).first()
+	pf.verify = True
+	pf.save()
+	messages.success(request, "Your Account has been Verified, You can Login Now.")
+	return redirect('accountss:login')  
