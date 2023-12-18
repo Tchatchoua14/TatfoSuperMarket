@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
+import debug_toolbar
 # from rest_framework_swagger.views import get_swagger_view
 
 # schema_view = get_swagger_view(title="Notes API")
@@ -36,6 +37,8 @@ urlpatterns = [
     #     path('auth/', include('rest_framework.urls')),
     # path('api/jwtauth/', include('jwtauth.urls'), name='jwtauth'),
     # path('api/docs/', schema_view),
+    # path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')), #new
+    # path('oauth2-info/', include('oauth2_provider.urls', namespace='oauth2_provider')), #new
 ]
 
 #handling the 404 error
@@ -44,6 +47,9 @@ handler404 = 'Ecommerce.views.error_404_view'
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ]
 
 # github
 # cle client 9e85d9492e25f149252b

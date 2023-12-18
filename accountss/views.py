@@ -100,7 +100,7 @@ class UserLoginView(LoginView):
 
 def logout_view(request):
     logout(request)
-    return redirect(reverse('accountss:welcome'))
+    return redirect(reverse('accountss:login'))
 
 class MyPasswordChangeView(PasswordChangeView):
     template_name = 'registration/password_change.html'

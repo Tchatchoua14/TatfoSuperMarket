@@ -15,6 +15,7 @@ import os
 from decouple import config #new
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -72,6 +73,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
+    'debug_toolbar', #new
+    # 'cookie_law', #new
+    'axes', #new
+
 ]
 
 
@@ -86,6 +91,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'allauth.account.middleware.AccountMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware', #new
+    # 'cookie_law.middleware.CookieLawMiddleware', #new
+    # 'oauth2_provider', #new
+    'axes.middleware.AxesMiddleware',
    
 ]
 
@@ -189,7 +198,7 @@ CART_SESSION_ID = 'cart'
 LOGIN_URL = 'accountss:login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = 'accountss:welcome'
-ACCOUNT_LOGOUT_REDIRECT_URL = 'accountss:welcome'
+# ACCOUNT_LOGOUT_REDIRECT_URL = 'accountss:welcome'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #new
 
@@ -365,4 +374,49 @@ PAYMENT_CANCEL_URL="http://127.0.0.1:8000/cancel/"
 #     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser",],
 #     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema", #new
 # }
+
+# OAUTH2_PROVIDER = {
+#     'SCOPES' : {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
+# }
+
+
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+# COOKIE_LAW = {
+#     'banner_text': 'Ce site utilise des cookies pour amélioler l\'expérience utilisateur.',
+#     'button_text': 'Accepter',
+#     'cookie_name': 'my_cookie',
+#     'cookie_lifetime': '365',
+#     'cookie_secure': 'False',
+# }
+
+AXES_FAILURE_LIMIT = 3 # nombre maximun de tentatives échouéés avant le blocage
+AXES_LOCK_OUT_AT_FAILURE = True #activer le blocage après tentatives échouées
+AXES_COOLOFF_TIME = timedelta(minutes=1) #Durée du blocage
+
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+SESSION_COOKIE_AGE = 1800
+
+
+
+
 

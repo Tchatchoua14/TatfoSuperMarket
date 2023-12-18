@@ -1,11 +1,13 @@
 {% extends "master.html" %}
+{% comment %} {% load debug_toolbar %} {% endcomment %}
 {% load static %}
 {% block title %}
 Home
 {% endblock %}
 {% block content1 %}
 {% load crispy_forms_tags %}
-<!--Search Form Drawer-->
+
+<!--Search Form Drawer--> 
 <div class="search">
     <div class="search__form">
         <form class="search-bar__form" action="{% url "Ecommerce:search" %}" method="GET">
