@@ -20,9 +20,13 @@ from django.conf.urls.static import static
 from django.urls import path, include, re_path
 import debug_toolbar
 # from oauth2_provider import views as oauth2_views #new
-from rest_framework_swagger.views import get_swagger_view
 
-schema_view = get_swagger_view(title="Notes API")
+# from rest_framework_swagger.views import get_swagger_view
+
+# schema_view = get_swagger_view(title="Notes API")
+
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView #new
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,9 +43,12 @@ urlpatterns = [
     path('auth/', include('rest_framework.urls')),
     path('api/v1/', include('api.urls')),
     # path('api/v1', include('router.urls')),
-    path('api/docs/', schema_view),
-    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')), #new
+    # path('api/docs/', schema_view), #new 
+    path('oauth/', include('oauth2_provider.urls', namespace='oauth2_provider')), #new
     # path('oauth2-info/', 'oauth2_views.AuthorizationEndpoint.as_view()', name='oauth2_info'), #new
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'), #new
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'), #new
+     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
 #handling the 404 error

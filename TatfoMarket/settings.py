@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sites', #new
     'rest_framework',  # new
     'corsheaders',  # new 
-    'rest_framework_swagger',
+    # 'rest_framework_swagger',
     'coupons.apps.CouponsConfig',
     'allauth',
     'allauth.account',
@@ -73,12 +73,16 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'debug_toolbar', #new
     # 'cookie_law', #new
-     # 'django_cookie_law', #new
+    # 'django_cookie_law', #new
     'axes', #new
     'api',
     'oauth2_provider',
+    'drf_spectacular', #new
 
 ]
+
+# 1xSBTsdYfNrFqK4S44KgQ2SKsqKIeiK5SxPz8DNu client id vinyassou
+# 7CEsrTxAmrNws2VvdYistcsxAWsAGVZylS48wATK client id tonton
 
 
 MIDDLEWARE = [
@@ -94,7 +98,7 @@ MIDDLEWARE = [
     # 'allauth.account.middleware.AccountMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware', #new
     # 'cookie_law.middleware.CookieLawMiddleware', #new
-     # 'django_cookie_law.middleware.CookieLawMiddleware', #new
+    # 'django_cookie_law.middleware.CookieLawMiddleware', #new
     'axes.middleware.AxesMiddleware',
     'corsheaders.middleware.CorsMiddleware',
    
@@ -376,7 +380,8 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser",],
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema", #new
+    # "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema", #new
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema", #new
 }
 
 OAUTH2_PROVIDER = {
@@ -404,7 +409,7 @@ INTERNAL_IPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
+    "http://localhost:8080",
 ]
 
 # COOKIE_LAW = {
