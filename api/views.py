@@ -1,16 +1,57 @@
 from rest_framework import generics
-from .serializers import TodoSerializer
-from todo.models import Todo
+from .serializers import ProductSerializer
+from Ecommerce.models import Product
+from django.shortcuts import render
+
+# Create your views here.
+
+from django.contrib.auth import get_user_model
+from rest_framework import response, decorators, permissions, status
+from rest_framework_simplejwt.tokens import RefreshToken
+from .serializers import UserCreateSerializer
+from rest_framework import viewsets
+from rest_framework.exceptions import PermissionDenied
+
+User = get_user_model()
+
+class IsOwner(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        return obj.owner == request.user
+
+class ProductList(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = (IsOwner,)
+
+     # Ensure a user sees only own Note objects.
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.is_authenticated:
+    #         return Product.objects.filter(owner=user)
+    #     raise PermissionDenied()
+
+    # # Set user as owner of a Notes object.
+    # def perform_create(self, serializer):
+    #     serializer.save(owner=self.request.user)
 
 
-class TodoList(generics.ListCreateAPIView):
-    queryset = Todo.objects.all()
-    serializer_class = TodoSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
 
-class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Todo.objects.all()
-    serializer_class = TodoSerializer
+@decorators.api_view(["POST"])
+@decorators.permission_classes([permissions.AllowAny])
+def registration(request):
+    serializer = UserCreateSerializer(data=request.data)
+    if not serializer.is_valid():
+        return response.Response(serializer.errors, status.HTTP_400_BAD_REQUEST)        
+    user = serializer.save()
+    refresh = RefreshToken.for_user(user)
+    res = {
+        "refresh": str(refresh),
+        "access": str(refresh.access_token),
+    }
+    return response.Response(res, status.HTTP_201_CREATED)
+

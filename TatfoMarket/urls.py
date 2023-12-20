@@ -19,9 +19,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
 import debug_toolbar
-# from rest_framework_swagger.views import get_swagger_view
+# from oauth2_provider import views as oauth2_views #new
+from rest_framework_swagger.views import get_swagger_view
 
-# schema_view = get_swagger_view(title="Notes API")
+schema_view = get_swagger_view(title="Notes API")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,11 +35,13 @@ urlpatterns = [
     # re_path('accounts/', include('social_django.urls', namespace='social')),
     # path('social-auth/', include('social_django.urls', namespace='social')),
     #path('order/', include('order.urls', namespace='order')),
-    #     path('auth/', include('rest_framework.urls')),
-    # path('api/jwtauth/', include('jwtauth.urls'), name='jwtauth'),
-    # path('api/docs/', schema_view),
-    # path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')), #new
-    # path('oauth2-info/', include('oauth2_provider.urls', namespace='oauth2_provider')), #new
+    # path('cookies/', include('cookie_law.urls')), #new
+    path('auth/', include('rest_framework.urls')),
+    path('api/v1/', include('api.urls')),
+    # path('api/v1', include('router.urls')),
+    path('api/docs/', schema_view),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')), #new
+    # path('oauth2-info/', 'oauth2_views.AuthorizationEndpoint.as_view()', name='oauth2_info'), #new
 ]
 
 #handling the 404 error

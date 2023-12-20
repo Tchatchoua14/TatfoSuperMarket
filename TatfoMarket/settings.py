@@ -53,11 +53,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites', #new
-    # 'order.apps.OrderConfig',
-    # 'corsheaders',
-    # 'rest_framework',  # new
-    # 'corsheaders',  # new 
-    # 'rest_framework_swagger', # new
+    'rest_framework',  # new
+    'corsheaders',  # new 
+    'rest_framework_swagger',
     'coupons.apps.CouponsConfig',
     'allauth',
     'allauth.account',
@@ -75,7 +73,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'debug_toolbar', #new
     # 'cookie_law', #new
+     # 'django_cookie_law', #new
     'axes', #new
+    'api',
+    'oauth2_provider',
 
 ]
 
@@ -93,8 +94,9 @@ MIDDLEWARE = [
     # 'allauth.account.middleware.AccountMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware', #new
     # 'cookie_law.middleware.CookieLawMiddleware', #new
-    # 'oauth2_provider', #new
+     # 'django_cookie_law.middleware.CookieLawMiddleware', #new
     'axes.middleware.AxesMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
    
 ]
 
@@ -321,6 +323,7 @@ AUTHENTICATION_BACKENDS = [
 
     'django.contrib.auth.backends.ModelBackend', #new
     'allauth.account.auth_backends.AuthenticationBackend',
+    'axes.backends.AxesStandaloneBackend',
     ]
 
 ACCOUNT_EMAIL_REQUIRED = True #new
@@ -365,19 +368,20 @@ PAYMENT_CANCEL_URL="http://127.0.0.1:8000/cancel/"
 # gettext_bin = '/usr/bin/msgfmt'
 
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated",],
-#     "DEFAULT_AUTHENTICATION_CLASSES": [
-#         # "rest_framework_simplejwt.authentication.JWTAuthentication",
-#         "rest_framework.authentication.SessionAuthentication",
-#     ],
-#     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser",],
-#     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema", #new
-# }
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated",],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication", #new
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser",],
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema", #new
+}
 
-# OAUTH2_PROVIDER = {
-#     'SCOPES' : {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
-# }
+OAUTH2_PROVIDER = {
+    'SCOPES' : {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
+}
 
 
 DEBUG_TOOLBAR_PANELS = [
@@ -399,13 +403,20 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+]
+
 # COOKIE_LAW = {
 #     'banner_text': 'Ce site utilise des cookies pour amélioler l\'expérience utilisateur.',
 #     'button_text': 'Accepter',
 #     'cookie_name': 'my_cookie',
-#     'cookie_lifetime': '365',
+#     'cookie_lifetime': '365', 
 #     'cookie_secure': 'False',
 # }
+
+# COOKIES_POLICY_URL = "/cookies/"
+# COOKIES_POLICY_TEMPLATE = "cookie_law/cookies_policy.html"
 
 AXES_FAILURE_LIMIT = 3 # nombre maximun de tentatives échouéés avant le blocage
 AXES_LOCK_OUT_AT_FAILURE = True #activer le blocage après tentatives échouées
@@ -415,6 +426,23 @@ AXES_COOLOFF_TIME = timedelta(minutes=1) #Durée du blocage
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SESSION_COOKIE_AGE = 1800
+
+# SWAGGER_SETTINGS = {
+#     'USE_SESSION_AUTH': False,
+#     'SECURITY_DEFINITIONS': {
+#        'api_key': {
+#         'type': 'apikey',
+#         'in': 'header',
+#         'name': 'Authorization',
+#        }
+#     }, 
+#     'JSON_EDITOR': True,
+#     'api_version': '0.1',
+#     'enable_methods': [
+#         'get', 'post', 'put', 'patch', 'delete'
+#     ],
+#     'api_path': '/',
+# }  #new
 
 
 
