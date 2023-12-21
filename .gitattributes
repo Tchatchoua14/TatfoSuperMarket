@@ -1,0 +1,13 @@
+# Configuration des fins de ligen pour les différents types de fichiers
+*.txt  text
+*.md   text 
+*.csv  text
+*.sh   text eol=lf 
+
+# Encodage des fichiers texte
+*.txt  encoding=utf-8
+*.csv  encoding=utf-8
+
+# Configuration des filtres personnalisés
+*.jpg  binary
+*.docx diff=word

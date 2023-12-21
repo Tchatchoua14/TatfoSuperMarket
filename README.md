@@ -1,6 +1,10 @@
-"E-commerce"
+<div align="center">
+![Logo TatfoMarket](./static/images/apple-touch-icon-114x114.png)
+</div>
 
-# Django E-commerce
+"E-commerce TatfoSuperMarket"
+
+# Django E-commerce TatfoSuperMarket
 Django-ecommerce is an open-source ecommerce platform built on the Django Web Framework.
 ## Features Included
 - Custom Admin dashboard
@@ -8,8 +12,7 @@ Django-ecommerce is an open-source ecommerce platform built on the Django Web Fr
 - Shopping Cart
 - Order Management
 - Coupon system
-- Payments Using Stripe
-- Responsive, mobile-friendly design
+- Payments Using NOTCHPAY 
 - Much more...
 
 ## Installation
