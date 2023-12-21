@@ -3,14 +3,14 @@
 *.pyc
 __pycache__
 *.log
+.db.sqlite3
 *.db.sqlite3
-*db.sqlite3
 
 # Répertoires spécifiques à Django 
-media/
-static/
+/media
+/static
 
 
 # Fichiers de configuration contenant des informations sensibles
-*.env
-*.secret_key
+.env
+.secret_key
