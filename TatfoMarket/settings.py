@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     'api',
     'oauth2_provider',
     'drf_spectacular', #new
+    'rest_framework_simplejwt', #new
 
 ]
 

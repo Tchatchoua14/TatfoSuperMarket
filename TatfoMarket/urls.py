@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
 import debug_toolbar
+from rest_framework_simplejwt.views import TokenObtainPairView #new
 # from oauth2_provider import views as oauth2_views #new
 
 # from rest_framework_swagger.views import get_swagger_view
@@ -40,6 +41,7 @@ urlpatterns = [
     # path('social-auth/', include('social_django.urls', namespace='social')),
     #path('order/', include('order.urls', namespace='order')),
     # path('cookies/', include('cookie_law.urls')), #new
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'), #new
     path('auth/', include('rest_framework.urls')),
     path('api/v1/', include('api.urls')),
     # path('api/v1', include('router.urls')),

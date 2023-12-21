@@ -4,21 +4,19 @@
 *.csv  text
 *.sh   text eol=lf 
 
-.txt  text
-.md   text 
-.csv  text
-.sh   text eol=lf
+
 
 # Encodage des fichiers texte
 *.txt  encoding=utf-8
 *.csv  encoding=utf-8
 
-.txt  encoding=utf-8
-.csv  encoding=utf-8
+* text=auto eol=lf
+
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+
 
 # Configuration des filtres personnalisés
 *.jpg  binary
 *.docx diff=word
-
-.jpg  binary
-.docx diff=word
