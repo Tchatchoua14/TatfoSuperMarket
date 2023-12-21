@@ -1,8 +1,7 @@
-<h1 align="center"> "E-commerce" | TatfoSuperMarket </h1>
+<h2 align="center"> E-commerce | TatfoSuperMarket </h2>
 
 <p align="center">
-  <img width="250" height="auto" src="./images/apple-touch-icon-114x114.png.png">
-  ![Aperçu](static/images/apple-touch-icon-114x114.png.png)
+  ![Aperçu] <img width="250" height="auto" src="./images/apple-touch-icon-114x114.png">
 </p>
 
 ![home](./images/loader.gif)
