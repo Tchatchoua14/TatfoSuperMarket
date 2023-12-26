@@ -1,10 +1,11 @@
 <h2 align="center"> E-commerce | TatfoSuperMarket </h2>
 
 <p align="center">
-  ![Aperçu] <img width="250" height="auto" src="./images/apple-touch-icon-114x114.png">
+![Aperçu] <img width="250" height="auto" src="static/images/apple-touch-icon-114x114.png">
+![Aperçu] <img width="250px" height="auto" src="staticfiles/images/apple-touch-icon-114x114.png">
 </p>
 
-![home](./images/loader.gif)
+![home](static/images/loader.gif)
 
 # Django E-commerce TatfoSuperMarket
 Django-ecommerce is an open-source ecommerce platform built on the Django Web Framework.

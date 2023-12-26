@@ -1,7 +1,11 @@
 # Fichiers générés automatiquement
+__pycache__/
+*.py[cod]
+*$py.class
 **/__pycache__/*
 
 .db.sqlite3
+db.sqlite3
 
 # Répertoires spécifiques à Django 
 /media
@@ -10,3 +14,8 @@
 
 # Fichiers de configuration contenant des informations sensibles
 .env
+# Environments
+.env*
+env/
+/staticfiles/
+/staticfiles

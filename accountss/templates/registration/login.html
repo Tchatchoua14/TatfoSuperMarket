@@ -6,6 +6,7 @@ Login
 {% block content %}
 {% include 'partials/header.html' %}
 {% include 'partials/menu.html' %}
+{% comment %} {% load crispy_forms_tags %} {% endcomment %}
 {% load socialaccount %}
 {% comment %} {% providers_media_js %} {% endcomment %}
 
@@ -25,8 +26,8 @@ Login
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 main-col offset-md-3 d-flex blur justify-content-center shadow-lg my-sm-0 my-sm-6 mt-5 mb-5">
                 	<div class="mb-4 mt-4">
                         {% if messages %}
-                        {% for messages in messages %}
-                        <div class="alert alert-success alert-dismissible fade show" role="alert"><strong>{{messages}}</strong> 
+                        {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert"><strong>{{message}}</strong> 
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
                         </div>
                         {% endfor %}
@@ -42,13 +43,14 @@ Login
                           <div class="row">
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                    {% for field in form %}
+                                    {{ form.as_p }} 
+                                    {% comment %} {% for field in form %}
                                     {{ field.label_tag }} 
                                     {{ field }}
                                     {% if field.errors %}
                                         <small>{{ field.errors|striptags  }}</small> 
                                     {% endif %}
-                                    {% endfor %}                       	
+                                    {% endfor %}                       	 {% endcomment %}
                                 </div>
                             </div>
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12">

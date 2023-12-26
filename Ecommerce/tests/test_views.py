@@ -1,12 +1,12 @@
-# from django.test import TestCase, Client
+# from django.test import TestCase, User
 # from django.urls import reverse
 # from shop.models import Category, Product
 
 # class TestViews(TestCase):
 
 #     def setUp(self):
-#         self.client = Client()
-#         self.category = Category.objects.create(name='fastfood', slug='fastfood1',)
+#         self.client = User()
+#         self.category = Category.objects.create(name='Azur', slug='azur',)
 #         self.product = Product.objects.create(category=self.category, id=20, name='testproduct', slug='testproduct',
 #         description='my test product', image='static/core/img/logo.png', price=30)
 

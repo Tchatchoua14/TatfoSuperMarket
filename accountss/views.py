@@ -21,14 +21,7 @@ from django.views.generic.edit import FormView
 from django.views import View
 import uuid
 from captcha.fields import ReCaptchaField
-# from cart.forms import CartAddProductForm
-# from .models import Category, Product
 
-# # Create your views here.
-
-# class UserLoginView(LoginView):
-#     template_name = 'registration/login.html'
-#     form_class = LoginForm
 
 class RegisterView(FormView):
     template_name = 'registration/register.html'
@@ -101,6 +94,7 @@ class UserLoginView(LoginView):
 def logout_view(request):
     logout(request)
     return redirect(reverse('accountss:login'))
+    # return redirect(reverse('Ecommerce:welcome'))
 
 class MyPasswordChangeView(PasswordChangeView):
     template_name = 'registration/password_change.html'
@@ -168,5 +162,12 @@ class MyProfile(LoginRequiredMixin, View):
             messages.error(request,'Error updating you profile')
             
             return render(request, 'registration/profile.html', context)
-            
-    
+
+@login_required           
+def delete_account(request):
+    if request.method == 'POST':
+        #supprission du compte de l'utilisateur actuel
+        request.user.delete()
+        logout(request)
+        return redirect(reverse('accountss:login'))
+    return render(request, 'registration/delete.html')

@@ -5,8 +5,7 @@ Checkout
 {% endblock %}
 {% block content %}
 {% include 'partials/header.html' %}
-{% include 'partials/menu.html' %}
-   <script src="https://js.stripe.com/v3/"></script> 
+{% include 'partials/menu.html' %} 
       <!--Body Content-->
       <div id="page-content" class="mt-5">
     	<!--Page Title-->
@@ -298,7 +297,7 @@ Checkout
                                                                 <input type="date" name="exdate" class="form-control">
                                                             </div>
                                                             <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                                                <img class="padding-25px-top xs-padding-5px-top" src="assets/images/payment-img.jpg" alt="card" title="card" />
+                                                                <img class="padding-25px-top xs-padding-5px-top" src="{% static "images/payment-img.jpg" %}" alt="card" title="card" />
                                                             </div>
                                                         </div>
                                                     </fieldset>
@@ -310,19 +309,19 @@ Checkout
                                 </div>
 
                                 <div class="order-button-payment">
-                                    <button class="btn" value="Place order" type="submit">Place order</button>
-                                    <form id="payment-form" method="post" action="{% url 'Ecommerce:charge' %}">
+                                    {% comment %} <button class="btn mb-4" value="Place order" type="submit">Place order</button> {% endcomment %}
+                                    <form id="payment-form" method="post" action="">
                                          {% csrf_token %}
                                          <div id="card-element"></div>
-                                        <button class="btn" value="Place order" type="submit">Payer Stripe</button>  
-                                    </form>
+                                        <button class="btn mb-4" value="Place order" type="submit">PAY Stripe</button>  
+                                    </form> 
                                      {% comment %} paiement stripe {% endcomment %}
-                                    <a href=""> <button class="button is-primary" id="submitBtn">Purchase!</button></a>
+                                    {% comment %} <a href=""> <button class="button is-primary" id="submitBtn">Purchase!</button></a> {% endcomment %}
 
                                     <form  method="POST" action="{% url 'Ecommerce:process' %}">
                                         {% csrf_token %} 
             
-                                       <button class="btn" value="NotchPay" type="submit">Payer NotchPay</button>  
+                                       <button class="btn" value="" type="submit"><img class="mr-2" width="40px" height="40px" src="{% static "images/notch.png" %}" alt="card" title="card" />NOTCH PAY</button>
                                    </form>
                                 </div>
                             </div>
@@ -336,7 +335,7 @@ Checkout
     <!--End Body Content-->
 
     <script src="https://js.stripe.com/v3/"></script>
-    <script src="{% static 'assets/js/payments.js' %}"></script>
+    <script src="{% static 'js/payments.js' %}"></script>
     <script>
       var stripe = Stripe('{{ STRIPE_SECRET_KEY }}');
       var elements = stripe.elements();

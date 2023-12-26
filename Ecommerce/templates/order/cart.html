@@ -9,7 +9,7 @@ Cart
 
       <!--Body Content-->
       <div id="page-content" class="mt-5">
-    	<!--Page Title-->
+    	<!--Page Title--> 
     	<div class="page section-header text-center">
 			<div class="page-title">
         		<div class="wrapper"><h1 class="page-width">Your cart</h1></div>
@@ -20,6 +20,19 @@ Cart
         <div class="container">
         	<div class="row">
                 <div class="col-12 col-sm-12 col-md-8 col-lg-8 main-col">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert"><strong>{{message}}</strong> 
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if error %}
+                       <div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>{{error}}</strong> 
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+                       </div>
+                    {%endif%}
                 		<table class="cart style2">
                             <thead class="cart__row cart__header">
                                 <tr>
@@ -365,8 +378,8 @@ Cart
                           
                       </p>
                       <a href="{% url 'Ecommerce:checkout' %}"> <button name="checkout" id="cartCheckout" class="btn btn--small-wide checkout">checkout</button></a>
-                      <div class="paymnet-img"><img src="assets/images/payment-img.jpg" alt="Payment"></div>
-                      <a href=""> <button class="button is-primary" id="submitBtn">Purchase!</button></a>
+                      <div class="paymnet-img"><img src="{% static "images/payment-img.jpg" %}" alt="Payment"></div>
+                 
                     </div>
 
                 </div> 
@@ -376,8 +389,6 @@ Cart
     </div>
     <!--End Body Content-->
 
-
-    <script src="https://js.stripe.com/v3/"></script>  <!-- new -->
     <script>
         // Get all the increase and decrease buttons and the quantity inputs
         const increaseButtons = document.querySelectorAll('.increase');

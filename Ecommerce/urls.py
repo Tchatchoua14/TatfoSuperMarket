@@ -45,8 +45,8 @@ urlpatterns = [
     path('cart/', views.CartListView.as_view(), name='cart_list'),
     path('cart-quantity/<int:cart_id>/', views.modify_cart_quantity, name='cart_quantity'),
     path('delete-cart-item/<int:cart_id>/', views.delete_cart_item, name='delete_cart_item'),
-    path('config/', views.stripe_config),  # new
-    path('create-checkout-session/', views.create_checkout_session), # new
+    path('config/', views.stripe_config, name='config'),  # new
+    path('create-checkout-session/', views.create_checkout_session, name='config1'), # new
 
     path('newsletter/', views.newsletter, name='newsletter'), # new
     # Paiement NotchPay

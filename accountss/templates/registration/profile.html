@@ -22,15 +22,15 @@ My Profile
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 main-col offset-md-3 d-flex blur justify-content-center shadow-lg my-sm-0 my-sm-6 mt-4 mb-5">
                 	<div class="mb-4 mt-4">
                                         
-                        <div class="center">
+                   <div class="center">
                             <form method="POST" enctype="multipart/form-data" class="card">
                                 {% csrf_token %} 
                                 
-                                {% if user.profile %}
+                               {% if user.profile %}
                                     <img src="{{user.profile.avatar.url}}" alt="{{ user.username }}" class="avatar"  accept=".jpg,.jpeg,.png"/>
-                                {% endif %}
+                                {% endif %} 
                                 
-                                <h2 class="text-center">{{ user.username | title }}</h2>
+                               <h2 class="text-center">{{ user.username | title }}</h2>
                                 <p class="text-center"><a href="mailto:{{user.email}}">{{user.email}}</a></p>
                                 <hr>
                                 
@@ -40,10 +40,14 @@ My Profile
                                 
                                 <label for="avatar">Avatar:</label>
                                 <input type="file" name="avatar" id="avatar">	
-                                
+                           
                                 <button type="submit" class="btn btn-primary full-width">Update Profile</button>
                             
                             </form>
+                        </div> 
+
+                        <div class="center">
+                            <a href="{% url 'accountss:delete_account' %}" class="text-center">Supprimer mon compte</a>
                         </div>
 
                     </div>

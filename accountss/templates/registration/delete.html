@@ -1,0 +1,60 @@
+{% extends "master.html" %}
+{% load static %}
+{% block title %}
+Supprimer mon compte
+{% endblock %}
+{% block content %}
+{% include 'partials/header.html' %}
+{% include 'partials/menu.html' %}
+{% load socialaccount %}
+{% comment %} {% providers_media_js %} {% endcomment %}
+
+     <!--Body Content-->
+     <div id="page-content" class="mt-5">
+    	<!--Page Title-->
+    	<div class="page section-header text-center">
+			<div class="page-title">
+        		<div class="wrapper"><h1 class="page-width">Supprimer mon compte utilsateur</h1></div>
+      		</div>
+		</div>
+        <!--End Page Title-->
+
+
+        <div class="container">
+        	<div class="row">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 main-col offset-md-3 d-flex blur justify-content-center shadow-lg my-sm-0 my-sm-6 mt-5 mb-5">
+                	<div class="mb-4 mt-4">
+                        {% if messages %}
+                        {% for messages in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert"><strong>{{messages}}</strong> 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        {% if error %}
+                           <div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>{{error}}</strong> 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+                           </div>
+                        {%endif%}
+                       <form method="POST" action="">
+                        {% csrf_token %}
+                          <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <input class="btn mb-3" type="submit" value="Confirmer la suppression">                	
+                                </div>
+                            </div>
+                           
+                          </div>
+                      
+                     </form>
+                    </div>
+               	</div>
+            </div>
+        </div>
+        
+    </div>
+    <!--End Body Content-->
+
+{% endblock %}

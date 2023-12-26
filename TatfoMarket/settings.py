@@ -26,15 +26,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^p&fn33z_8)+3zz%4v!yy3$d2^n&l5a&(sozq*k^7y+6=3&1tf'
+
+# SECRET_KEY = 'django-insecure-^p&fn33z_8)+3zz%4v!yy3$d2^n&l5a&(sozq*k^7y+6=3&1tf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-# SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
+# DEBUG = True
+
+SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 
 # # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG', default=True, cast=bool)
+
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 
 # # load production server from .env
@@ -56,7 +59,7 @@ INSTALLED_APPS = [
     'rest_framework',  # new
     'corsheaders',  # new 
     # 'rest_framework_swagger',
-    'coupons.apps.CouponsConfig',
+    # 'coupons.apps.CouponsConfig',
     'allauth',
     'allauth.account',
     # 'social_django',
@@ -64,7 +67,7 @@ INSTALLED_APPS = [
     'captcha',
     'accountss',
     'Ecommerce.apps.EcommerceConfig',
-    'cart.apps.CartConfig',
+    # 'cart.apps.CartConfig',
     # 'djstripe', 
     'crispy_forms',
     'allauth.socialaccount',
@@ -82,8 +85,7 @@ INSTALLED_APPS = [
 
 ]
 
-# 1xSBTsdYfNrFqK4S44KgQ2SKsqKIeiK5SxPz8DNu client id vinyassou
-# 7CEsrTxAmrNws2VvdYistcsxAWsAGVZylS48wATK client id tonton
+
 
 
 MIDDLEWARE = [
@@ -120,7 +122,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # 'social_django.context_processors.backends', #new
                 # 'social_django.context_processors.login_redirect', #new
-                'cart.context_processors.cart', #new
+                # 'cart.context_processors.cart', #new
                 'Ecommerce.context_processors.totalitem', #new
                 # 'django.core.context_processors.i18n', #new
                
@@ -200,7 +202,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-CART_SESSION_ID = 'cart'
+# CART_SESSION_ID = 'cart'
 
 LOGIN_URL = 'accountss:login'
 LOGIN_REDIRECT_URL = '/'
@@ -247,13 +249,6 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'online',
         },
 
-
-        # 'APP': {
-        #     'client_id': '574111392765-150nfpg6sn2dql8o0m78j2cfqduuu7an.apps.googleusercontent.com',
-        #     'secret': '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',
-        #     'key': ''
-        # }
-
         
         'APPS': {
             'client_id': '123',
@@ -278,11 +273,6 @@ SOCIALACCOUNT_PROVIDERS = {
         # },
 
 
-        # 'APP': {
-        #     'client_id': '9e85d9492e25f149252b',
-        #     'secret': 'f190d24327ee5ffdc6063caf02b4590f9cf586ed',
-        #     'key': ''
-        # }
     },
 
     'facebook': {
@@ -305,11 +295,6 @@ SOCIALACCOUNT_PROVIDERS = {
         # 'VERIFIED_EMAIL': False,
 
 
-        # 'APPS': {
-        #     'client_id': '701820614848473',
-        #     'secret': '58ee2658c1903c398f2dc9c215a1111f',
-        #     'key': ''
-        # }
     }
 }
 
@@ -366,9 +351,9 @@ LANGUAGES = [
 # AUTH_USER_MODEL = 'accountss.User'
 
 
-BACKEND_DOMAIN="http://127.0.0.1:8000"
-PAYMENT_SUCCESS_URL="http://127.0.0.1:8000/success/"
-PAYMENT_CANCEL_URL="http://127.0.0.1:8000/cancel/"
+BACKEND_DOMAIN="http://127.0.0.1:8080"
+PAYMENT_SUCCESS_URL="http://127.0.0.1:8080/success/"
+PAYMENT_CANCEL_URL="http://127.0.0.1:8080/cancel/"
 
 
 # gettext_bin = '/usr/bin/msgfmt'

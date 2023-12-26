@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{% static "css/responsive.css" %}">
     {% comment %} {% render_cookie_law %} {% endcomment %}
     <title>{% block title %}TatfoSuperMarket{% endblock %}</title>
-
+    {% load crispy_forms_tags %}
 </head>
 
 <body class="page-template belle">
@@ -119,8 +119,8 @@
       </script>
       <!--End For Newsletter Popup-->
 
-      <script src="https://js.stripe.com/v3/"></script>
-      <script src="{% static 'assets/js/payments.js' %}"></script>
+      {% comment %} <script src="https://js.stripe.com/v3/"></script> {% endcomment %}
+      <script src="{% static 'js/payments.js' %}"></script>
       <script>
         var stripe = Stripe('{{ STRIPE_SECRET_KEY }}');
         var elements = stripe.elements();

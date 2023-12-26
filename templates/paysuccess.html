@@ -26,11 +26,44 @@ Paysuccess
                               Thank You! The payment was successful.
                             </h4>
                             <p class="mb-0">
-                              {{ api|safe}}
+                              {% comment %} {{ api|safe}} {% endcomment %}
                               Soon we will deliver the product.
                             </p>
+                            <h5>Votre commande a bien été enregistrée.</h5>
                           </div>
                     </div>
+                   <div class="card-body">
+                      <div class="table-responsive">
+                          <table id="example1" class="table table-bordered table-striped dataTable dtr-inline dt-responsive" aria-describedby="example1_info">
+                            <thead>
+                            <tr>
+                              <th class="text-center"> Moyen de paiement </th>
+                              <th class="text-center">NOM</th>
+                              <th class="text-center">Email</th>
+                              <th class="text-center">Total</th>
+                              
+                            </tr>
+                            </thead>
+                        
+                            <tbody>
+        
+                            <tr>
+                              <td class="text-center">Notch Pay</td>
+                              <td class="text-center">{{ user.username }}</td>
+                              <td class="text-center text-capitalize">{{ user.email }}</td>
+                              <td class="text-center">{{ cart_total }}</td>
+                             
+                            </tr>
+                   
+                            </tbody>
+                          
+                          </table>
+                   
+                           
+                      </div>
+                      </div>
+                      <!-- /.card-body -->
+                    </div> 
                 </div>
 
             </div>

@@ -4,8 +4,8 @@
 {% block title %}
 Home
 {% endblock %}
-{% block content1 %}
 {% load crispy_forms_tags %}
+{% block content1 %}
 
 <!--Search Form Drawer--> 
 <div class="search">
@@ -259,6 +259,92 @@ Home
                             <div id="tab1" class="tab_content grid-products">
                                 <div class="productSlider">
                                     {% for product in product1 %}
+                                    {% if product.stock < 1 %}
+    
+                                    <div class="col-12 item">
+                                        <!-- start product image -->
+                                        <div class="product-image">
+                                            <!-- start product image -->
+                                            <a href="{{ product.get_absolute_url }}">
+                                                <!-- image -->
+                                                <img class="primary blur-up lazyload" id="va1" data-src="{{ product.image1.url }}" src="{{ product.image1.url }}" alt="image" title="product">
+                                                <!-- End image -->
+                                                <!-- Hover image -->
+                                                <img class="hover blur-up lazyload" data-src="{{ product.image2.url }}" src="{{ product.image2.url }}" alt="image" title="product">
+                                                <!-- End hover image -->
+                                                <!-- product label -->
+                                                <div class="product-labels rectangular"><span class="lbl on-sale">-16%</span> <span class="lbl pr-label1">new</span></div>
+                                                <!-- End product label -->
+                                            </a>
+                                            <!-- end product image -->
+                                            
+                                            <!-- countdown start -->
+                                            <div class="saleTime desktop" data-countdown="{{ product.created|time:'Y:M:d' }}"></div>
+                                            <!-- countdown end -->
+    
+                                            <!-- Start product button -->
+                            
+                                            <form class="variants add" action="" method="post">
+                                                {% csrf_token %}
+                                                    <input type="hidden" name="product" value="{{product.id}}">
+                                                    {% comment %} <button type="submit" class="btn btn-primary ml-3">Add to Cart</button> {% endcomment %}
+                                                    <button class="btn btn-addto-cart" type="submit" tabindex="0">Produit indisponible</button>
+                                            </form>
+                                            
+                                            <div class="button-set">
+                                                <a href="javascript:void(0)" title="Quick View" class="quick-view-popup quick-view" data-toggle="modal" data-target="#content_quickview">
+                                                    <i class="icon anm anm-search-plus-r"></i>
+                                                </a>
+                                                <div class="wishlist-btn">
+                                                    <a class="wishlist add-to-wishlist" href="{% url 'Ecommerce:add_to_wishlist' product.id %}">
+                                                        <i class="icon anm anm-heart-l"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="compare-btn">
+                                                    <a class="compare add-to-compare" href="" title="Add to Compare">
+                                                        <i class="icon anm anm-random-r"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!-- end product button -->
+                                        </div>
+                                        <!-- end product image -->
+                                        <!--start product details -->
+                                        <div class="product-details text-center">
+                                            <!-- product name -->
+                                            <a href="" class="btn">Indisponible</a>
+                                            <div class="product-name">
+                                                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                                            </div>
+                                            <!-- End product name -->
+                                            <!-- product price -->
+                                            <div class="product-price">
+                                                <span class="old-price">{{ product.priceReduction }}FCFA</span>
+                                                <span class="price">{{ product.price }}FCFA</span>
+                                            </div>
+                                            <!-- End product price -->
+                                            
+                                            <div class="product-review">
+                                                <i class="font-13 fa fa-star"></i>
+                                                <i class="font-13 fa fa-star"></i>
+                                                <i class="font-13 fa fa-star"></i>
+                                                <i class="font-13 fa fa-star-o"></i>
+                                                <i class="font-13 fa fa-star-o"></i>
+                                            </div>
+                                            <!-- Variant -->
+                                            <ul class="swatches">
+                                                <li class="swatch medium rounded"><img src="{% static "images/product-images/variant1.jpg" %}" id="im1" alt="image" /></li>
+                                                <li class="swatch medium rounded"><img src="{% static "images/product-images/variant2.jpg" %}" id="im2" alt="image" /></li>
+                                                <li class="swatch medium rounded"><img src="{% static "images/product-images/variant3.jpg" %}" id="im3" alt="image" /></li>
+                                                <li class="swatch medium rounded"><img src="{% static "images/product-images/variant4.jpg" %}" id="im4" alt="image" /></li>
+                                                <li class="swatch medium rounded"><img src="{% static "images/product-images/variant5.jpg" %}" id="im5" alt="image" /></li>
+                                                <li class="swatch medium rounded"><img src="{% static "images/product-images/variant6.jpg" %}" id="im6" alt="image" /></li>
+                                            </ul>
+                                            <!-- End Variant -->
+                                        </div>
+                                        <!-- End product details -->
+                                    </div>
+                                    {% else %}
                                     <div class="col-12 item">
                                         <!-- start product image -->
                                         <div class="product-image">
@@ -342,6 +428,7 @@ Home
                                         </div>
                                         <!-- End product details -->
                                     </div>  
+                                    {% endif %}
                                     {% endfor %}
                                 </div>
                             </div>

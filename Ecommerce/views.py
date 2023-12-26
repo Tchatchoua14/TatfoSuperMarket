@@ -10,7 +10,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, View
 from django.utils import timezone
 from django.views.decorators.http import require_POST
-# from .cart import Cart
 from django.core.mail import send_mail
 from .forms import CartAddProductForm, CouponApplyForm
 # from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
@@ -18,9 +17,11 @@ from django.http import HttpResponse, JsonResponse
 import requests 
 import stripe
 import uuid
+from django.urls import reverse, reverse_lazy
 # from accountss.models import User
 from django.utils.translation import gettext_lazy as _
 from .forms import BillingDetailsForm, NewlettersForm
+from django.views.decorators.csrf import csrf_exempt # new
 # import random
 # import string
 
@@ -33,7 +34,6 @@ notchpay = settings.NOTCHPAY_SECRET_KEY
 
 @login_required
 def index(request, category_slug=None):
-    # nombres = Product.objects.count()
     category = None
     categories = Category.objects.all()
     product1 = Product.objects.filter(available=True).order_by('created')[:5]
@@ -59,13 +59,21 @@ def index(request, category_slug=None):
 def welcome(request, category_slug=None):
     category = None
     categories = Category.objects.all()
-    product1 = Product.objects.all().order_by('created')[:5]
+    product1 = Product.objects.filter(available=True).order_by('created')[:5]
     product2 = Product.objects.all().order_by('created')[5:10]
     product3 = Product.objects.all().order_by('created')[10:15]
+    totalitem = 0
+    carts = Cart.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+            totalitem = len(Cart.objects.filter(user=request.user))
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         products = products.filter(category=category)
-    context = {'category': category, 'categories': categories, 'product1': product1, 'product2': product2, 'product3': product3}
+    cart_total_price = 0
+    for cart in carts:
+        cart_total_price += cart.total_price
+    context = {'category': category, 'categories': categories, 'product1': product1, 'product2': product2, 'product3': product3, 'totalitem': totalitem, 'carts': carts, 'cart_total_price': cart_total_price}
+    #  'total_quantity': total_quantity, 'subtotal': subtotal, 'total': total, 'cart_items': cart_items}
     return render(request, 'welcome.html', context)
 
 def terms(request):
@@ -84,13 +92,6 @@ def newsletter(request):
         form = NewlettersForm()
     return render(request, 'base.html', {'form': form})
         
-
-# class HomeView(ListView):
-#     model = Item
-#     paginate_by = 10
-#     template_name = "home.html"
-
-
 # def product_list(request, category_slug=None):
 #     category = None
 #     categories = Category.objects.all()
@@ -219,19 +220,19 @@ def coupon_apply(request):
 #     coupon_apply_form = CouponApplyForm()
 #     return render(request, 'cart/cart.html', {'cart': cart, 'coupon_apply_form': coupon_apply_form})
 
-# @login_required
+@login_required
 def view_wishlist(request):
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
     return render (request, 'wishlist.html', {'wishlist': wishlist})
 
-# @login_required
+@login_required
 def add_to_wishlist(request, product_id):
     product = Product.objects.get(id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
     wishlist.products.add(product)
     return redirect ('/wishlist/', product_id=product_id) 
 
-# @login_required
+@login_required
 def remove_from_wishlist(request, product_id):
     product = Product.objects.get(id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
@@ -290,6 +291,11 @@ def choix_livraison(request):
 @login_required
 def checkout(request):
     # orders = Order.objects.create(user=request.user)
+    # product = Product.objects.get(pk=request.POST.get('product'))
+    # quantity = int(request.POST.get('quantity', 1))
+    # if product.stock > 0:
+    #     product.stock -= 1
+    #     product.save()
     stripe.api_key = settings.STRIPE_SECRET_KEY
     intent = stripe.PaymentIntent.create(amount=1000, currency='usd',)
     totalitem = 0
@@ -330,6 +336,10 @@ def add_to_cart(request):
         if not created:
             cart.quantity += quantity
             cart.save()
+        if quantity > product.stock:
+            messages.error(request, f'La quantité démandée de {product.name} est supérieure au stock disponible.')
+        if product.stock < 1:
+            messages.error(request, "Ce produit est actuellement indisponible")
     return redirect('Ecommerce:cart_list')
 
 
@@ -372,7 +382,16 @@ def delete_cart_item(request, cart_id):
     return redirect('Ecommerce:cart_list')
 
 def success(request):
-    return render(request, "paysuccess.html")
+    totalitem = 0
+    carts = Cart.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+            totalitem = len(Cart.objects.filter(user=request.user)) 
+    cart_total_price = 0
+    shipping_amount = 2000
+    for cart in carts:
+        cart_total_price += cart.total_price
+        cart_total = cart_total_price + shipping_amount
+    return render(request, "paysuccess.html", {'cart_total': cart_total})
 
 def cancel(request):
     return render(request, "paycancel.html")
@@ -404,24 +423,18 @@ def order(request):
     return render(request, 'order/create.html', {'cart': cart, 'form': form})
 
 
-
-from django.http.response import JsonResponse # new
-from django.views.decorators.csrf import csrf_exempt # new
-
-
-
-
 # new
 @csrf_exempt
 def stripe_config(request):
     if request.method == 'GET':
         stripe_config = {'publicKey': settings.STRIPE_PUBLIC_KEY}
+        print(stripe_config)
         return JsonResponse(stripe_config, safe=False)
 
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'http://localhost:8000/'
+        domain_url = 'http://localhost:8080/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
          
@@ -473,11 +486,19 @@ def create_checkout_session(request):
 
     # // sb.Cdo6b4O77BATFtsPUCxlp3buDWtAjqQSV7hXX8fHSBkXC724BO9ncKwxKGfUIqQpsoYojcFYqJAr6GjfUgJ0XVGw1mEI2I4zg00bzfHx8K5mynoKRMXLNiwDLGTyw
 
+#   // +237698500461
+#     // CARD NUMBER 4929076432525038 
+#     // EXP 06/2025
+#     // CVC 477
+
 @login_required
 def process(request):
     # product = get_object_or_404(Product, pk=product_id)
     # description = product.description
     # price = product.price
+
+    # product = Product.objects.get(pk=request.POST.get('product'))
+    # quantity = int(request.POST.get('quantity', 1))
     carts = Cart.objects.filter(user=request.user)
     email= request.user.email
     cart_total_price = 0
@@ -510,17 +531,21 @@ def process(request):
         #     return redirect(authorization_url)
         # return JsonResponse({'message': 'paiement réussi'})
         api = response.json()
+        # product.stock -= quantity
+        # product.save()
+        #     item.delete()
         # api = response.text
         # print(api)
     # return HttpResponse (api)
         if 'authorization_url' in api:
             authorization_url = api['authorization_url']
             # print(authorization_url)
-            return redirect(authorization_url)
-        return render(request, 'paysuccess.html', {'authorization_url': authorization_url})
+            return redirect(authorization_url) 
+        # return render(request, 'paysuccess.html', {'api': api})
+        return redirect(reverse('Ecommerce:success'))
     else:
         # return JsonResponse({'error': 'Erreur lors du paiment'})
-        return render(request, 'paycancel.html')
+        return render(request, 'paycancel.html') 
 
 
 
@@ -566,7 +591,7 @@ def send_email_after_registration(email, token):
     ATTN : Please do not reply to this email.This mailbox is not monitored and you will not receive a response.
 
     Your Verification Email is Given bellow 👇
-    Click on the link to verify your account https://http://127.0.0.1:8000/account-verify/{token}
+    Click on the link to verify your account https://http://127.0.0.1:8080/account-verify/{token}
 
     If you have any queries, Please contact us at,
 

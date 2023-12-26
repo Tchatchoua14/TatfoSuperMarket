@@ -34,8 +34,8 @@ urlpatterns = [
     path('', include('Ecommerce.urls')),
     path('', include('accountss.urls')),
     path('', include('django.contrib.auth.urls')),
-    path('cart/', include('cart.urls', namespace='cart')),
-    path('coupons/', include('coupons.urls', namespace='coupons')),
+    # path('cart/', include('cart.urls', namespace='cart')),
+    # path('coupons/', include('coupons.urls', namespace='coupons')),
     path('accounts/', include('allauth.urls')),
     # re_path('accounts/', include('social_django.urls', namespace='social')),
     # path('social-auth/', include('social_django.urls', namespace='social')),
@@ -62,19 +62,3 @@ if settings.DEBUG:
     urlpatterns += [
         path('__debug__/', include(debug_toolbar.urls)),
     ]
-
-# github
-# cle client 9e85d9492e25f149252b
-# cle secret f190d24327ee5ffdc6063caf02b4590f9cf586ed 
-
-# facebook 
-# cle client 701820614848473
-# cle secret  58ee2658c1903c398f2dc9c215a1111f
-
-# google
-# 574111392765-150nfpg6sn2dql8o0m78j2cfqduuu7an.apps.googleusercontent.com
-# cle client 574111392765-150nfpg6sn2dql8o0m78j2cfqduuu7an.apps.googleusercontent.com
-# cle secret  
-
-#    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  vrai code secret
-    # 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
