@@ -423,12 +423,13 @@ def order(request):
     return render(request, 'order/create.html', {'cart': cart, 'form': form})
 
 
+
 # new
 @csrf_exempt
 def stripe_config(request):
     if request.method == 'GET':
         stripe_config = {'publicKey': settings.STRIPE_PUBLIC_KEY}
-        print(stripe_config)
+        # print(stripe_config)
         return JsonResponse(stripe_config, safe=False)
 
 @csrf_exempt

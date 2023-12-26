@@ -124,6 +124,7 @@ TEMPLATES = [
                 # 'social_django.context_processors.login_redirect', #new
                 # 'cart.context_processors.cart', #new
                 'Ecommerce.context_processors.totalitem', #new
+                # 'Ecommerce.context_processors.carts', #new
                 # 'django.core.context_processors.i18n', #new
                
 

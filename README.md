@@ -1,11 +1,8 @@
 <h2 align="center"> E-commerce | TatfoSuperMarket </h2>
 
 <p align="center">
-![Aperçu] <img width="250" height="auto" src="static/images/apple-touch-icon-114x114.png">
-![Aperçu] <img width="250px" height="auto" src="staticfiles/images/apple-touch-icon-114x114.png">
+![Aperçu] <img width="250" height="auto" src="./Ecommerce/static/images/apple-touch-icon-114x114.png">
 </p>
-
-![home](static/images/loader.gif)
 
 # Django E-commerce TatfoSuperMarket
 Django-ecommerce is an open-source ecommerce platform built on the Django Web Framework.
@@ -23,6 +20,7 @@ Django-ecommerce is an open-source ecommerce platform built on the Django Web Fr
 To run this project in production or development mode you have to make sure, [Python](https://www.python.org/downloads/) is installed on your computer. If you opted to install an older version of Python, it is possible that it did not come with `Pip` preinstalled.
 
 - To check Python and Pip are installed on your machine:
+
 ```bash
 # Python
 python --version
@@ -34,20 +32,14 @@ pip --version
 
 ```bash
 pip install virtualenv
-```
-In a terminal, run the following command to create virtual environment in the base directory of this project:
-
-```bash
-virtualenv venv
-```
-This command will create a new `venv` folder in your project directory. You can activate the python environment by running the following command:
 
 ```bash
 # Mac OS or Linux
 source venv/bin/activate
 
-
+```
 **1.clone Repository & Install Packages**
+
 ```sh
 git clone https://github.com/Tchatchoua14/TatfoSuperMarket.git
 pip install -r requirements.txt
