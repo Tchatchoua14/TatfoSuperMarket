@@ -76,103 +76,22 @@ Checkout
             <div class="row billing-fields">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 sm-margin-30px-bottom">
                     <div class="create-ac-content bg-light-gray padding-20px-all">
-                        <form id="payment-form" method="post" action="{% url 'Ecommerce:charge' %}">
+                        <form id="payment-form" method="post" action="{% url 'Ecommerce:order' %}">
                             {% csrf_token %}
                             <div id="card-element"></div>
-                           
                             <fieldset>
                                 <h2 class="login-title mb-3">Billing details</h2>
                                 <div class="row">
                                     <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                        <label for="input-firstname">First Name <span class="required-f">*</span></label>
-                                        <input name="firstname" value="" id="input-firstname" type="text">
+                                       {{ form.as_p }}
                                     </div>
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                        <label for="input-lastname">Last Name <span class="required-f">*</span></label>
-                                        <input name="lastname" value="" id="input-lastname" type="text">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                        <label for="input-email">E-Mail <span class="required-f">*</span></label>
-                                        <input name="email" value="" id="input-email" type="email">
-                                    </div>
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                        <label for="input-telephone">Telephone <span class="required-f">*</span></label>
-                                        <input name="telephone" value="" id="input-telephone" type="tel">
-                                    </div>
-                                </div>
+                        
                             </fieldset>
-
-                            <fieldset>
-                                <div class="row">
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                                        <label for="input-company">Company</label>
-                                        <input name="company" value="" id="input-company" type="text">
-                                    </div>
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                        <label for="input-address-1">Address <span class="required-f">*</span></label>
-                                        <input name="address_1" value="" id="input-address-1" type="text">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                                        <label for="input-address-2">Apartment <span class="required-f">*</span></label>
-                                        <input name="address_2" value="" id="input-address-2" type="text">
-                                    </div>
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                        <label for="input-city">City <span class="required-f">*</span></label>
-                                        <input name="city" value="" id="input-city" type="text">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                        <label for="input-postcode">Post Code <span class="required-f">*</span></label>
-                                        <input name="postcode" value="" id="input-postcode" type="text">
-                                    </div>
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                        <label for="input-country">Country <span class="required-f">*</span></label>
-                                        <select name="country_id" id="input-country">
-                                            <option value=""> --- Please Select --- </option>
-                                            <option value="244">Aaland Islands</option>
-                                            <option value="1">Afghanistan</option>
-                                            <option value="2">Albania</option>
-                                            <option value="3">Algeria</option>
-                                            <option value="4">American Samoa</option>
-                                            <option value="5">Andorra</option>
-                                            <option value="6">Angola</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                        <label for="input-zone">Region / State <span class="required-f">*</span></label>
-                                        <select name="zone_id" id="input-zone">
-                                            <option value=""> --- Please Select --- </option>
-                                            <option value="3513">Aberdeen</option>
-                                            <option value="3514">Aberdeenshire</option>
-                                            <option value="3515">Anglesey</option>
-                                            <option value="3516">Angus</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </fieldset>
-                          
-                            <fieldset>
-                                <div class="row">
-                                    <div class="form-group form-check col-md-12 col-lg-12 col-xl-12">
-                                        <label class="form-check-label padding-15px-left">
-                                            <input type="checkbox" class="form-check-input" value=""><strong>Create an account ?</strong>
-                                        </label>
-                                    </div>
-                                </div>
-                            </fieldset>
-
+    
                             <fieldset>
                                 <div class="row">
                                     <div class="form-group col-md-12 col-lg-12 col-xl-12">
-                                        <label for="input-company">Order Notes <span class="required-f">*</span></label>
-                                        <textarea class="form-control resize-both" rows="3"></textarea>
+                                        <button class="btn" value="Place order" type="submit">Place order</button>
                                     </div>
                                 </div>
                             </fieldset>
@@ -308,22 +227,7 @@ Checkout
                                     </div>
                                 </div>
 
-                                <div class="order-button-payment">
-                                    {% comment %} <button class="btn mb-4" value="Place order" type="submit">Place order</button> {% endcomment %}
-                                    <form id="payment-form" method="post" action="">
-                                         {% csrf_token %}
-                                         <div id="card-element"></div>
-                                        <button class="btn mb-4" value="Place order" type="submit">PAY Stripe</button>  
-                                    </form> 
-                                     {% comment %} paiement stripe {% endcomment %}
-                                    {% comment %} <a href=""> <button class="button is-primary" id="submitBtn">Purchase!</button></a> {% endcomment %}
-
-                                    <form  method="POST" action="{% url 'Ecommerce:process' %}">
-                                        {% csrf_token %} 
-            
-                                       <button class="btn" value="" type="submit"><img class="mr-2" width="40px" height="40px" src="{% static "images/notch.png" %}" alt="card" title="card" />NOTCH PAY</button>
-                                   </form>
-                                </div>
+                            
                             </div>
                         </div>
                     </div>
@@ -334,54 +238,7 @@ Checkout
     </div>
     <!--End Body Content-->
 
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="{% static 'js/payments.js' %}"></script>
-    <script>
-      var stripe = Stripe('{{ STRIPE_SECRET_KEY }}');
-      var elements = stripe.elements();
-      var style = {
-        base: {
-          color: '#32325d',
-          fontFamily: ' "Helvetica Neue", Helvetica, sans-serif',
-          fontSmoothing: 'antialiased',
-          '::placeholder': {
-            color: '#aab7c4'
-          }
-        }
-        invalid: {
-          color: '#fa755a',
-          iconColor: '#fa755a'
-        }
-      };
-
-      var card = elements.create('card', {style: style});
-      card.mount('#card-element');
-      var paymentMethod = null;
-      card.on('change', function(event) {
-        var displayError = document.getElementById('card-errors');
-        if(event.error) {
-          displayError.textContent = event.error.message;
-        } else {
-          displayError.textContent = '';
-        }
-      });
-      var form = document.getElementById('payment-form');
-      form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        stripe.confirmCardPayment(
-          '{{ client_secret}}',
-          {payment_method: {card: card}}
-        ).then(function(result) {
-          if (result.error) {
-            var errorElement = document.getElementById('card-errors');
-            errorElement.textContent = result.error.message;
-          } else {
-            // le paiement a réussi, effectuez l'action nécessaire
-          }
-        });
-      });
-
-
+   
 
 
 

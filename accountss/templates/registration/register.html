@@ -9,7 +9,11 @@ Register
 {% load crispy_forms_tags %}
 {% load socialaccount %}
 {% comment %} {% providers_media_js %} {% endcomment %}
-
+<style>
+    .error{
+        color: red;
+    }
+</style>
      <!--Body Content--> 
      <div id="page-content" class="mt-5">
     	<!--Page Title-->
@@ -26,11 +30,24 @@ Register
                 	<div class="mb-4 mt-4">
                         {% if messages %}
                         {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert"><strong>{{message}}</strong> 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                         {% if error %}
+                           <div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>{{error}}</strong> 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+                           </div>
+                        {%endif%} 
+                        {% comment %} {% if messages %}
+                        {% for message in messages %}
                         <p {% if message.tags %} class="alert alert-dismissible alert-{{message.tags}} mb-5" {% endif %} role="alert">{{message}}
                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
                         </p>
                         {% endfor %}
-                        {% endif %}          
+                        {% endif %}         {% endcomment %}
                             <form method="post" novaldiate  id="CustomerLoginForm" accept-charset="UTF-8" class="contact-form">
                                 {% csrf_token %}
     

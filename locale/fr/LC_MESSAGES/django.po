@@ -1,0 +1,223 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-06 23:09+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: .\TatfoMarket\settings.py:350
+msgid "English"
+msgstr ""
+
+#: .\TatfoMarket\settings.py:351
+msgid "French"
+msgstr ""
+
+#: .\Ecommerce
+msgid "Email"
+msgstr "E-mail"
+
+#: .\Ecommerce
+msgid "Cancel"
+msgstr "Annuler"
+
+#: .\Ecommerce
+msgid "Are you sure you want to delete your account?"
+msgstr "Êtes-vous sûr·e de vouloir supprimer votre compte ?"
+
+#: .\Ecommerce
+msgid "Already registered?"
+msgstr "Déjà inscrit·e ?"
+
+#: .\Ecommerce
+msgid "All rights reserved."
+msgstr "Tous droits réservés."
+
+#: .\Ecommerce
+msgid "Forgot your password?"
+msgstr "Mot de passe oublié ?"
+
+#: .\Ecommerce
+msgid "Delete Account"
+msgstr "Supprimer le compte"
+
+#: .\Ecommerce
+msgid "Confirm Password"
+msgstr "Confirmer le mot de passe"
+
+#: .\Ecommerce
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: .\Ecommerce
+msgid "Create"
+msgstr "Enregistrer"
+
+#: .\Ecommerce
+msgid "Login"
+msgstr "Connexion"
+
+#: .\Ecommerce
+msgid "Log Out"
+msgstr "Se déconnecter"
+
+#: .\Ecommerce
+msgid "Log in"
+msgstr "Se connecter"
+
+#: .\Ecommerce
+msgid "Register"
+msgstr "Inscription"
+
+#: .\Ecommerce
+msgid "Profile"
+msgstr "Profil"
+
+#: .\Ecommerce
+msgid "Password"
+msgstr "Mot de passe"
+
+#: .\Ecommerce
+msgid "Not Found"
+msgstr "Non trouvé"
+
+#: .\Ecommerce
+msgid "New Password"
+msgstr "Nouveau mot de passe"
+
+#: .\Ecommerce
+msgid "Name"
+msgstr "Nom"
+
+#: .\Ecommerce
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: .\Ecommerce
+msgid "Reset Password"
+msgstr "Réinitialisation du mot de passe"
+
+#: .\Ecommerce
+msgid "Remember me"
+msgstr "Se souvenir de moi"
+
+#: .\Ecommerce
+msgid "Privacy policy"
+msgstr "Politique de confidentialité"
+
+#: .\Ecommerce
+msgid "privacy policy & terms"
+msgstr "la politique de confidentialité et les conditions"
+
+#: .\Ecommerce
+msgid "I agree to"
+msgstr "J'accepte"
+
+#: .\Ecommerce
+msgid "Create an Account"
+msgstr "Créer un compte"
+
+#: .\Ecommerce
+msgid "Anglais"
+msgstr "Français"
+
+#: .\Ecommerce
+msgid "BUY NOW"
+msgstr "ACHETER"
+
+#: .\Ecommerce
+msgid "Sign In with"
+msgstr "S'inscrire avec"
+
+#: .\Ecommerce
+msgid "Sign in instead"
+msgstr "Connectez-vous"
+
+#: .\Ecommerce
+msgid "Already have an account ?"
+msgstr "Avez-vous déjà un compte?"
+
+#: .\Ecommerce
+msgid "Copyright © 2023. All rights reserved, designed and developed by"
+msgstr "Copyright © 2023. Tous droits réservés, conçu et développé par"
+
+#: .\Ecommerce
+msgid "Terms & condition"
+msgstr "Termes et condition"
+
+#: .\Ecommerce
+msgid "wishlist"
+msgstr "liste de souhaits"
+
+#: .\Ecommerce
+msgid "Worldwide Express Shipping"
+msgstr "Expédition Express Dans Le Monde Entier"
+
+#: .\Ecommerce
+msgid "All payment are Secured and trusted."
+msgstr "Tous les paiements sont sécurisés et fiables."
+
+#: .\Ecommerce
+msgid "Secure Payments"
+msgstr "Paiement sécurisé"
+
+#: .\Ecommerce
+msgid "We support online 24/7 on day"
+msgstr "Nous vous assistons en ligne 24h/24 et 7j/7"
+
+#: .\Ecommerce
+msgid "Online Support"
+msgstr "Support en ligne"
+
+#: .\Ecommerce
+msgid "30 days money back guarantee"
+msgstr "Garantie de remboursement de 30 jours"
+
+#: .\Ecommerce
+msgid "Money Guarantee"
+msgstr "Garentie d'argent"
+
+#: .\Ecommerce
+msgid "Free shipping on all US orders"
+msgstr "Livraison gratuite sur toutes les commandes américaines"
+
+#: .\Ecommerce
+msgid "Free Shipping &amp; Return"
+msgstr "Livraison et Retour gratuits"
+
+#: .\Ecommerce
+msgid "Support Center"
+msgstr "Centre de soutien"
+
+#: .\Ecommerce
+msgid "Orders and Returns"
+msgstr "Commandes et retour"
+
+#: .\Ecommerce
+msgid "Request Personal Data"
+msgstr "Demander des données personnelles"
+
+#: .\Ecommerce
+msgid "Customer Services"
+msgstr "Services clients"
+
+#: .\Ecommerce
+msgid "Careers"
+msgstr "Carrières"
+
+
+
+
+

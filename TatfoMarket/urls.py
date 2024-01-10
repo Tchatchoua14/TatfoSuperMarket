@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
+from django.contrib.auth.decorators import login_required #new
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
+from django.utils.translation import gettext_lazy as _
+from django.conf.urls.i18n import i18n_patterns
 import debug_toolbar
 from rest_framework_simplejwt.views import TokenObtainPairView #new
 # from oauth2_provider import views as oauth2_views #new
@@ -30,8 +33,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('Ecommerce.urls')),
+    path('admin/', login_required(admin.site.urls)),
+    # path('', include('Ecommerce.urls')),
     path('', include('accountss.urls')),
     path('', include('django.contrib.auth.urls')),
     # path('cart/', include('cart.urls', namespace='cart')),
@@ -52,6 +55,10 @@ urlpatterns = [
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'), #new
      path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
+
+urlpatterns += i18n_patterns (
+    path('', include('Ecommerce.urls')),
+)
 
 #handling the 404 error
 handler404 = 'Ecommerce.views.error_404_view'

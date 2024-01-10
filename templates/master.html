@@ -10,6 +10,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="description">
+    
+     <!-- nouveau -->
+    <meta property="og:name" content="{{product.name}}">
+    <meta property="og:description" content="{{product.description}}">
+    <meta property="og:image1" content="{{product.image1.url}}">
+    <meta property="og:url" content="{{request.build_abosulte_uri}}">
+    <meta property="twitter:name" content="{{product.name}}">
+    <meta property="twiter:description" content="{{product.description}}">
+    <meta property="twitter:image1" content="{{product.image1.url}}">
+
+
     <!-- Plugins CSS -->
     <link rel="stylesheet" href="{% static "css/plugins.css" %}">
     <!-- Bootstap CSS -->
@@ -17,6 +28,8 @@
     <!-- Main Style CSS -->
     <link rel="stylesheet" href="{% static "css/style.css" %}"> 
     <link rel="stylesheet" href="{% static "css/responsive.css" %}">
+    <link rel="stylesheet" href="{% static "js/datatable/dataTables.bootstrap4.css" %}">
+    <link rel="stylesheet" href="{% static "js/datatable/dataTables.bootstrap4.min.css" %}">
     {% comment %} {% render_cookie_law %} {% endcomment %}
     <title>{% block title %}TatfoSuperMarket{% endblock %}</title>
     {% load crispy_forms_tags %}
@@ -83,6 +96,11 @@
        <script src="{% static "js/popper.min.js" %}"></script>
        <script src="{% static "js/lazysizes.js" %}"></script>
        <script src="{% static "js/main.js" %}"></script>
+       <script src="{% static "js/datatable/dataTables.bootstrap4.js" %}"></script>
+       <script src="{% static "js/datatable/dataTables.bootstrap4.min.js" %}"></script>
+       <script src="{% static "js/datatable/jquery.dataTables.js" %}"></script>
+       <script src="{% static "js/datatable/jquery.dataTables.min.js" %}"></script>
+       <script src="{% static "js/datatables-responsive/main.js" %}"></script>
        <!--For Newsletter Popup-->
        <script>
           jQuery(document).ready(function(){  

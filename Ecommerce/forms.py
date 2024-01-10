@@ -1,6 +1,7 @@
 from django import forms
 from .models import BillingDetails, Newsletters
 
+
 class BillingDetailsForm(forms.ModelForm):
     class Meta:
         model = BillingDetails
@@ -17,11 +18,11 @@ class CartAddProductForm(forms.Form):
 
 
 class NewlettersForm(forms.ModelForm):
-    class Meta:
+    class Meta: 
         model = Newsletters
         fields = ['email']
 
         def clean_email(self):
             email = self.cleaned_data["email"]
-            return email
+            return email 
         

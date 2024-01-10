@@ -9,7 +9,11 @@ Login
 {% comment %} {% load crispy_forms_tags %} {% endcomment %}
 {% load socialaccount %}
 {% comment %} {% providers_media_js %} {% endcomment %}
-
+<style>
+    .error{
+        color: red;
+    }
+</style>
      <!--Body Content-->
      <div id="page-content" class="mt-5">
     	<!--Page Title-->
@@ -40,6 +44,13 @@ Login
                         {%endif%}
                        <form method="POST" action="">
                         {% csrf_token %}
+                        
+                        {% for field in form %}
+
+                        {% if field.errors %}
+                            <small class="error">{{ field.errors|striptags  }}</small> 
+                        {% endif %}
+                        {% endfor %}
                           <div class="row">
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">

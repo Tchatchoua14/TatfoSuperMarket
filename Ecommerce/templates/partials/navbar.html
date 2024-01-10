@@ -1,15 +1,24 @@
 {% load static %} 
+{% load i18n %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
    <!--Top Header-->
     <div class="top-header">
-        <div class="container-fluid">
+        <div class="container-fluid"> 
             <div class="row">
             	<div class="col-10 col-sm-8 col-md-5 col-lg-4">
+    
                     <div class="language-dropdown">
-                        <span class="language-dd">English</span>
-                        <ul id="language">
-                            <li class="">French</li>
+                        {% comment %} {% for languag in languages %} {% endcomment %}
+                        <span class="language-dd"><a href="/en" id="english" style="text-decoration: none;">English <img src="{% static "images/flag-uk.png" %}" alt="" id="english1" /></a></span>
+                       
+                        <ul id="language" class="text-uppercase">
+                            <a href="/fr"  id="french" style="text-decoration: none;"><li class="">French<img src="{% static "images/flag-france.png" %}" alt="" class="ml-1" id="french2"/></li></a> 
                         </ul>
+                        {% comment %} {% endfor %} {% endcomment %}
                     </div>
+                  
+                   
                     <p class="phone-no"><i class="anm anm-phone-s"></i> +(237) 691 167 590</p>
                 </div>
                 <div class="col-sm-4 col-md-4 col-lg-4 d-none d-lg-none d-md-block d-lg-block">

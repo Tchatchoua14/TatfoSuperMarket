@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from .models import Category, Product, Coupon, Wishlist, Livraison, Cart, Newsletters, Order, BillingDetails, Verification
-# CartItem
 from django.db.models import Q
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -12,14 +11,14 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.core.mail import send_mail
 from .forms import CartAddProductForm, CouponApplyForm
-# from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 import requests 
 import stripe
 import uuid
 from django.urls import reverse, reverse_lazy
 # from accountss.models import User
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import activate, gettext_lazy as _
+from django.utils import translation
 from .forms import BillingDetailsForm, NewlettersForm
 from django.views.decorators.csrf import csrf_exempt # new
 # import random
@@ -84,43 +83,13 @@ def error_404_view(request, exception):
 
 def newsletter(request):
     if request.method == 'POST':
-        form = NewlettersForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return redirect('Ecommerce:home')
-    else:
-        form = NewlettersForm()
-    return render(request, 'base.html', {'form': form})
+        email = request.POST.get('email')
+        if email:
+            Newsletters.objects.create(email=email)
+            messages.success(request, "Newsletter créé avec success !")
+        return redirect('Ecommerce:cart_list')
+    return render(request, 'order/cart.html')
         
-# def product_list(request, category_slug=None):
-#     category = None
-#     categories = Category.objects.all()
-#     products = Product.objects.filter(available=True)
-#     if category_slug:
-#         category = get_object_or_404(Category, slug=category_slug)
-#         products = products.filter(category=category)
-#     context = {'category': category, 'categories': categories, 'products': products}
-#     return render(request, 'Ecommerce/product/list.html', context)
-
-
-# class ProductListView(generic.ListView):
-#     template_name = 'shop/product/list.html'
-
-#     def get_queryset(self):
-#         return Product.objects.filter(available=True)
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         category = None
-#         if category_slug:
-#             category = get_object_or_404(Category, slug=category_slug)
-#         context['category'] = category
-#         context['categories'] = Category.objects.all()
-
-
-
-
-
 def product_detail(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
     cart_product_form = CartAddProductForm()
@@ -149,38 +118,6 @@ def search(request, category_slug=None):
     context = {'category': category, 'categories': categories, 'products': products, 'totalitem': totalitem, 'carts': carts}
     return render(request, 'search.html', context)
 
-
-# class ProductDetialView(generic.DetailView):
-
-#     template_name = 'shop/product/detail.html'
-#     model = Product
-#     form_class = CartAddProductForm
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['products'] = get_object_or_404(Product, 
-#         id=id, slug=slug, available=True)
-#         return context
-
-
-
-# def order_create(request):
-#     cart = Cart(request)
-#     if request.method == 'POST':
-#         form = OrderCreateForm(request.POST)
-#         if form.is_valid():
-#             order = form.save()
-#             for item in cart:
-#                 OrderItem.objects.create(order=order, product=item['product'],
-#                                          price=item['price'], quantity=item['quantity'])
-#             # clear the cart
-#             cart.clear()
-#             return render(request, 'order/created.html', {'order': order})
-#     else:
-#         form = OrderCreateForm()
-#     return render(request, 'order/create.html', {'cart': cart, 'form': form})
-
-
 @require_POST
 def coupon_apply(request):
     now = timezone.now()
@@ -197,29 +134,6 @@ def coupon_apply(request):
             request.session['coupon_id'] = None
     return redirect('Ecommerce:checkout')
 
-# @require_POST
-# def cart_add(request, product_id):
-#     cart = Cart(request)
-#     product = get_object_or_404(Product, id=product_id)
-#     form = CartAddProductForm(request.POST)
-#     if form.is_valid():
-#         cd = form.cleaned_data
-#         cart.add(product=product, quantity=cd['quantity'], update_quantity=cd['update'])
-#     return redirect('Ecommerce:cart_detail')
-
-# def cart_remove(request, product_id):
-#     cart = Cart(request)
-#     product = get_object_or_404(Product, id=product_id)
-#     cart.remove(product)
-#     return redirect('Ecommerce:cart_detail')
-
-# def cart_detail(request):
-#     cart = Cart(request)
-#     for item in cart:
-#         item['update_quantity_form'] = CartAddProductForm(initial={'quantity': item['quantity'], 'override': True})
-#     coupon_apply_form = CouponApplyForm()
-#     return render(request, 'cart/cart.html', {'cart': cart, 'coupon_apply_form': coupon_apply_form})
-
 @login_required
 def view_wishlist(request):
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
@@ -230,6 +144,7 @@ def add_to_wishlist(request, product_id):
     product = Product.objects.get(id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
     wishlist.products.add(product)
+    messages.success(request, "Product ajouté dans la wishlist avec success !")
     return redirect ('/wishlist/', product_id=product_id) 
 
 @login_required
@@ -237,67 +152,41 @@ def remove_from_wishlist(request, product_id):
     product = Product.objects.get(id=product_id)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
     wishlist.products.remove(product)
+    messages.success(request, "Product rétiré dans la wishlist avec success !")
     return redirect ('/wishlist/')
-
-# def checkout(request):
-#     stripe.api_key = settings.STRIPE_SECRET_KEY
-#     intent = stripe.PaymentIntent.create(amount=1000, currency='usd',)
-#     return render(request, 'checkout.html', {'client_secret': intent.client_secret})
 
 def choix_livraison(request):
     moyens = Livraison.objects.all()
     return render(request, 'livraison.html', {'moyens': moyens})
 
-# def process_livraison(request):
-#     if request.method == 'POST':
-#         moyen_id = request.POST.get('livraison')
-#         moyen_livraison = Livraison.objects.get(pk=moyen_id)
-#         return redirect('choix_livraison')
-
-
-# def view_cart(request):
-#     cart = Cart.objects.get(user=request.user)
-#     cart_items = cart.cartitem_set.all()
-#     cart_items1 = CartItem.objects.filter(cart=cart)
-#     total_price = (item.product.price * item.quantity for item in cart_items)
-#     subtotal = sum(item.product.price * item.quantity for item in cart_items)
-#     total_quantity = sum(item.quantity for item in cart_items)
-#     total = 0
-#     for item in cart_items1:
-#         item.total = item.product.price * item.quantity
-#         total = item.total
-#     return render (request, 'cart/cart.html', {'cart_items': cart_items, 'subtotal': subtotal, 'total': total, 'total_quantity': total_quantity })
-
-
-# def add_to_cart(request, product_id):
-#     product = get_object_or_404(Product, pk=product_id)
-#     cart, created = Cart.objects.get_or_create(user=request.user)
-#     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-#     cart_item.quantity += 1
-#     cart_item.save()
-#     return redirect ('/cart/')
-
-# def remove_from_cart(request, product_id):
-#     product = get_object_or_404(Product, pk=product_id)
-#     cart = Cart.objects.get(user=request.user)
-#     cart_item = CartItem.objects.get(cart=cart, product=product)
-#     if cart_item.quantity > 1:
-#         cart_item.quantity -= 1
-#         cart_item.save()
-#     else:
-#         cart_item.delete()
-#     return redirect ('/cart/')
-
 @login_required
 def checkout(request):
-    # orders = Order.objects.create(user=request.user)
-    # product = Product.objects.get(pk=request.POST.get('product'))
-    # quantity = int(request.POST.get('quantity', 1))
-    # if product.stock > 0:
-    #     product.stock -= 1
-    #     product.save()
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    intent = stripe.PaymentIntent.create(amount=1000, currency='usd',)
+    cart1 = Cart.objects.filter(user=request.user)
+    user = request.user
+    try:
+        billing_info = BillingDetails.objects.get(user=user)
+    except BillingDetails.DoesNotExist:
+        billing_info = None
+
+    if request.method == 'POST':
+        form = BillingDetailsForm(request.POST, instance=billing_info)
+        if form.is_valid():
+            billing_instance = form.save(commit=False)
+            billing_instance.user = user
+            billing_instance.save()
+            return redirect('Ecommerce:paiement')
+            for item in cart1:
+                Order.objects.create(order=order, product=item['product'],
+                                         price=item['price'], quantity=item['quantity'])
+            # clear the cart
+            # cart1.delete()
+            cart1.clear()
+            return render(request, 'checkout.html', {'order': order})
+    else:
+        form = BillingDetailsForm(instance=billing_info)
+    # return render(request, 'checkout.html', {'cart1': cart1, 'form': form})
+
+
     totalitem = 0
     carts = Cart.objects.filter(user=request.user)
     if request.user.is_authenticated:
@@ -307,7 +196,11 @@ def checkout(request):
     for cart in carts:
         cart_total_price += cart.total_price
         cart_total = cart_total_price + shipping_amount
-    return render(request, 'checkout.html', {'client_secret': stripe.api_key, 'totalitem': totalitem, 'carts':carts, 'cart_total_price': cart_total_price, 'cart_total': cart_total, 'shipping_amount': shipping_amount })
+    return render(request, 'checkout.html', {'totalitem': totalitem, 'carts':carts, 'cart_total_price': cart_total_price, 'cart_total': cart_total, 'shipping_amount': shipping_amount, 'form': form })
+
+@login_required
+def paiement(request):
+    return render(request, 'paiement.html')
 
 def charge(request):
     if request.method =='POST':
@@ -323,8 +216,6 @@ def charge(request):
         )
         return JsonResponse({'message': 'Paiement réussi!'})
 
-
-
 def add_to_cart(request):
     if request.method == 'POST':
         product = Product.objects.get(pk=request.POST.get('product'))
@@ -333,6 +224,7 @@ def add_to_cart(request):
             user=request.user, product=product,
             defaults={'quantity': quantity}
         )
+        messages.success(request, "Product ajouté dans le panier avec success !")
         if not created:
             cart.quantity += quantity
             cart.save()
@@ -341,7 +233,6 @@ def add_to_cart(request):
         if product.stock < 1:
             messages.error(request, "Ce produit est actuellement indisponible")
     return redirect('Ecommerce:cart_list')
-
 
 class CartListView(ListView):
     template_name = "order/cart.html"
@@ -366,36 +257,30 @@ class CartListView(ListView):
 
         return context
 
-
 def modify_cart_quantity(request, cart_id):
     cart = Cart.objects.get(id=cart_id)
     if request.method == 'POST':
         quantity = int(request.POST.get('quantity', 1))
         cart.quantity = quantity
         cart.save()
+        messages.success(request, "Quantité de product modifié dans le panier avec success !")
     return redirect('Ecommerce:cart_list')
 
 def delete_cart_item(request, cart_id):
     cart = Cart.objects.get(id=cart_id)
     if request.method == 'POST':
         cart.delete()
+        messages.success(request, "Product supprimé dans le panier avec success !")
     return redirect('Ecommerce:cart_list')
 
 def success(request):
-    totalitem = 0
-    carts = Cart.objects.filter(user=request.user)
-    if request.user.is_authenticated:
-            totalitem = len(Cart.objects.filter(user=request.user)) 
-    cart_total_price = 0
-    shipping_amount = 2000
-    for cart in carts:
-        cart_total_price += cart.total_price
-        cart_total = cart_total_price + shipping_amount
-    return render(request, "paysuccess.html", {'cart_total': cart_total})
+    cart = Cart.objects.filter(user=request.user)
+    cart.delete()
+    # cart.save()
+    return render(request, "paysuccess.html")
 
 def cancel(request):
     return render(request, "paycancel.html")
-
 
 def order(request):
     cart = Cart.objects.filter(user=request.user)
@@ -411,26 +296,17 @@ def order(request):
             billing_instance = form.save(commit=False)
             billing_instance.user = user
             billing_instance.save()
-            return redirect('Ecommerce:home')
+            return redirect('Ecommerce:paiement')
             for item in cart:
                 Order.objects.create(order=order, product=item['product'],
                                          price=item['price'], quantity=item['quantity'])
             # clear the cart
-            cart.clear()
-            return render(request, 'order/create.html', {'order': order})
+            cart.delete()
+            # cart.clear()
+            return render(request, 'checkout.html', {'order': order})
     else:
         form = BillingDetailsForm(instance=billing_info)
-    return render(request, 'order/create.html', {'cart': cart, 'form': form})
-
-
-
-# new
-@csrf_exempt
-def stripe_config(request):
-    if request.method == 'GET':
-        stripe_config = {'publicKey': settings.STRIPE_PUBLIC_KEY}
-        # print(stripe_config)
-        return JsonResponse(stripe_config, safe=False)
+    return render(request, 'checkout.html', {'cart': cart, 'form': form})
 
 @csrf_exempt
 def create_checkout_session(request):
@@ -494,20 +370,15 @@ def create_checkout_session(request):
 
 @login_required
 def process(request):
-    # product = get_object_or_404(Product, pk=product_id)
-    # description = product.description
-    # price = product.price
-
-    # product = Product.objects.get(pk=request.POST.get('product'))
-    # quantity = int(request.POST.get('quantity', 1))
     carts = Cart.objects.filter(user=request.user)
     email= request.user.email
+    name= request.user.username
     cart_total_price = 0
     for cart in carts:
         cart_total_price += cart.total_price
     amount = cart_total_price
-    # amount = 5000
     currency = 'XAF'
+    success_url=settings.PAYMENT_SUCCESS_URL,
     description = "achat via Notchpay"
     # email = "customer@email.com"
     # phone = 655728267
@@ -522,67 +393,24 @@ def process(request):
         'currency' : currency,
         'description' : description, 
         'email' : email,
+        'name' : name,
         # 'phone' : phone
+        'callback': success_url,
     }
 
     response = requests.post(api_url, data=data, headers=headers)
     if response.status_code == 201:
         # authorization_url = "https://pay.notchpay.co/webcheckout/p.XpAviOtvFXpvuPPHp28Nv7W46NW00mYyryg0FBHDCSDzwGMZGre68OtIXJaVAfM6K3TAY20KyEXf9qV6Dc3FOSVQZ3jf1xTu"
-        # if authorization_url:
-        #     return redirect(authorization_url)
-        # return JsonResponse({'message': 'paiement réussi'})
         api = response.json()
-        # product.stock -= quantity
-        # product.save()
-        #     item.delete()
-        # api = response.text
-        # print(api)
-    # return HttpResponse (api)
         if 'authorization_url' in api:
             authorization_url = api['authorization_url']
             # print(authorization_url)
             return redirect(authorization_url) 
-        # return render(request, 'paysuccess.html', {'api': api})
-        return redirect(reverse('Ecommerce:success'))
+            # return HttpResponseRedirect(reverse('Ecommerce:success'))
+   
     else:
         # return JsonResponse({'error': 'Erreur lors du paiment'})
         return render(request, 'paycancel.html') 
-
-
-
-# class CreateStripeCheckoutSessionView(View):
-    """
-    Create a checkout session and redirect the user to Stripe's checkout page
-    """
-
-    # def post(self, request, *args, **kwargs):
-    #     price = Product.objects.get(id=self.kwargs["pk"])
-
-    #     checkout_session = stripe.checkout.Session.create(
-    #         payment_method_types=["card"],
-    #         line_items=[
-    #             {
-    #                 "price_data": {
-    #                     "currency": "usd",
-    #                     "unit_amount": int(product.price) * 100,
-    #                     "product_data": {
-    #                         "name": product.name,
-    #                         "description": product.description,
-    #                         "images": [
-    #                             f"{settings.BACKEND_DOMAIN}/{product.image1}"
-    #                         ],
-    #                     },
-    #                 },
-    #                 "quantity": product.quantity,
-    #             }
-    #         ],
-    #         metadata={"product_id": product.id},
-    #         mode="payment",
-    #         success_url=settings.PAYMENT_SUCCESS_URL,
-    #         cancel_url=settings.PAYMENT_CANCEL_URL,
-    #     )
-    #     return redirect('Ecommerce:cart_list')
-
 
 def send_email_after_registration(email, token):
     subject = "Verify Email"
@@ -612,9 +440,21 @@ def send_email_after_registration(email, token):
     recipient_list = [email]
     send_mail(subject=subject, message=message, from_email=from_email, recipient_list=recipient_list)
 
-def account_verify(request, token):
-	pf = Verification.objects.filter(token=token).first()
-	pf.verify = True
-	pf.save()
-	messages.success(request, "Your Account has been Verified, You can Login Now.")
-	return redirect('accountss:login')  
+# def account_verify(request, token):
+# 	pf = Verification.objects.filter(token=token).first()
+# 	pf.verify = True
+# 	pf.save()
+# 	messages.success(request, "Your Account has been Verified, You can Login Now.")
+# 	return redirect('accountss:login')  
+
+
+# def set_language(request):
+    
+#     if translation.get_language() == 'fr':
+#         translation.activate('en')
+#     else:
+#         translation.activate('fr')
+#     next = request.META.get('HTTP_REFERER', reverse('Ecommerce:home'))
+#     return HttpResponseRedirect(next)
+
+

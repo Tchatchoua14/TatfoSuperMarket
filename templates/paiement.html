@@ -1,0 +1,122 @@
+{% extends "master.html" %}
+{% load static %}
+{% block title %}
+Paiement
+{% endblock %}
+{% block content %}
+{% include 'partials/header.html' %}
+{% include 'partials/menu.html' %}
+     
+    <!--Body Content-->
+    <div id="page-content" class="mt-5">
+    	<!--Page Title-->
+    	<div class="page section-header text-center">
+			<div class="page-title">
+        		<div class="wrapper"><h1 class="page-width">Paiement</h1></div>
+      		</div>
+		</div>
+        <!--End Page Title-->
+        
+        <div class="container">
+        	<div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-3">
+            
+                    <div class="card mt-5">
+                        <div class="card-header">
+                          <div class="row">
+                            <div class="col-md-4 mt-3 mt-md-0">
+                              <p class="text-uppercase text-muted my-0">order placed</p>
+                            </div>
+                  
+                            <div class="col-md-4 mt-3 mt-md-0">
+                              <p class="text-uppercase text-muted my-0">Moyen de Paiement</p>
+                
+                            </div>
+                  
+                            <div class="col-md-4 mt-3 mt-md-0">
+                              <p class="text-uppercase text-muted my-0">order # X55SEDHRz9K5TYz6</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          <div class="row">
+                  
+                            <div class="col-md-6">
+                                <form  method="POST" action="{% url 'Ecommerce:process' %}">
+                                    {% csrf_token %} 
+        
+                                   <button class="btn" value="" type="submit"><img class="mr-2" width="40px" height="40px" src="{% static "images/notch.png" %}" alt="card" title="card" />NOTCH PAY</button>
+                               </form>
+                            </div>
+                  
+                            <div class="col-md-6">
+                                <form id="payment-form" method="post" action="">
+                                    {% csrf_token %}
+                                    <div id="card-element"></div>
+                                   <button class="btn mb-4" value="Place order" type="submit">PAY Stripe</button>  
+                               </form> 
+                            </div>
+                          </div>
+                        </div>
+                       
+                      </div> 
+                </div>
+                        
+            </div>
+        </div>
+        
+    </div>
+    <!--End Body Content-->
+
+
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="{% static 'js/payments.js' %}"></script>
+    <script>
+      var stripe = Stripe('{{ STRIPE_SECRET_KEY }}');
+      var elements = stripe.elements();
+      var style = {
+        base: {
+          color: '#32325d',
+          fontFamily: ' "Helvetica Neue", Helvetica, sans-serif',
+          fontSmoothing: 'antialiased',
+          '::placeholder': {
+            color: '#aab7c4'
+          }
+        }
+        invalid: {
+          color: '#fa755a',
+          iconColor: '#fa755a'
+        }
+      };
+
+      var card = elements.create('card', {style: style});
+      card.mount('#card-element');
+      var paymentMethod = null;
+      card.on('change', function(event) {
+        var displayError = document.getElementById('card-errors');
+        if(event.error) {
+          displayError.textContent = event.error.message;
+        } else {
+          displayError.textContent = '';
+        }
+      });
+      var form = document.getElementById('payment-form');
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        stripe.confirmCardPayment(
+          '{{ client_secret}}',
+          {payment_method: {card: card}}
+        ).then(function(result) {
+          if (result.error) {
+            var errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+          } else {
+            // le paiement a réussi, effectuez l'action nécessaire
+          }
+        });
+      });
+
+
+
+{% endblock %}

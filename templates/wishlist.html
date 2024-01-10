@@ -28,6 +28,13 @@ Wishlist
         <div class="container">
         	<div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert"><strong>{{message}}</strong> 
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
                 	<form action="#">
                         <div class="wishlist-table table-content table-responsive">
                             <table class="table table-bordered">

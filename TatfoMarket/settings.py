@@ -82,6 +82,8 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'drf_spectacular', #new
     'rest_framework_simplejwt', #new
+    # 'django_search', #new
+    # 'django_datatable',
 
 ]
 
@@ -106,6 +108,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
    
 ]
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 ROOT_URLCONF = 'TatfoMarket.urls'
 
@@ -170,6 +174,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'fr-fr'
+# LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -177,7 +182,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-# USE_L10N = True #new
+USE_L10N = True #new
 
 
 # Static files (CSS, JavaScript, Images)
@@ -217,6 +222,9 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST = 'smtp.mailgun.org'
+# EMAIL_HOST = 'smtp.mailtrap.io'
+# EMAIL_PORT = 2525
 # EMAIL_USE_TLS = True
 # EMAIL_PORT = 587
 # EMAIL_HOST_USER = "Tchatchouaviny@yahoo.fr"
@@ -349,6 +357,10 @@ LANGUAGES = [
     ('fr', _('French')),
 ]
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
+
 # AUTH_USER_MODEL = 'accountss.User'
 
 
@@ -438,6 +450,9 @@ SESSION_COOKIE_AGE = 1800
 # }  #new
 
 
-
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# AWS_ACCESS_KEY_ID = 'votre access key'
+# AWS_SECRET_ACCESS_KEY = 'votre '
+# AWS_STORAGE_BUCKET_NAME = 'nom de votre bucket'
 
 
