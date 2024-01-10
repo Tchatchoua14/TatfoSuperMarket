@@ -1,12 +1,12 @@
 {% extends "master.html" %}
 {% load static %}
+{% load i18n %}
 {% block title %}
-Login
+{% trans 'Login' %} 
 {% endblock %}
 {% block content %}
 {% include 'partials/header.html' %}
 {% include 'partials/menu.html' %}
-{% comment %} {% load crispy_forms_tags %} {% endcomment %}
 {% load socialaccount %}
 {% comment %} {% providers_media_js %} {% endcomment %}
 <style>
@@ -19,7 +19,7 @@ Login
     	<!--Page Title-->
     	<div class="page section-header text-center">
 			<div class="page-title">
-        		<div class="wrapper"><h1 class="page-width">Login</h1></div>
+        		<div class="wrapper"><h1 class="page-width">{% trans 'Login' %}</h1></div>
       		</div>
 		</div>
         <!--End Page Title-->
@@ -55,13 +55,7 @@ Login
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                     {{ form.as_p }} 
-                                    {% comment %} {% for field in form %}
-                                    {{ field.label_tag }} 
-                                    {{ field }}
-                                    {% if field.errors %}
-                                        <small>{{ field.errors|striptags  }}</small> 
-                                    {% endif %}
-                                    {% endfor %}                       	 {% endcomment %}
+                                
                                 </div>
                             </div>
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
@@ -69,21 +63,21 @@ Login
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember">
 
                                     <label class="form-check-label" for="remember">
-                                        Remember me
+                                        {% trans 'Remember me' %}
                                     </label>
                                 </div>
                             </div>
                           </div>
                           <div class="row">
                             <div class="text-center col-12 col-sm-12 col-md-12 col-lg-12">
-                                <input type="submit" class="btn mb-3" value="Log in">
+                                <input type="submit" class="btn mb-3" value="{% trans 'Log in' %}">
                                 <p class="mb-4">
                                
                                     <a href="{% url 'accountss:password_reset' %}">
-                                        Forgot your password? 
+                                        {% trans 'Forgot your password?' %} 
                                     </a>
                                  &nbsp; | &nbsp;
-                                 Don't have a account? <a href="{% url 'accountss:register' %}" id="customer_register_link">Create account</a>
+                                 {% trans "Don't have a account?" %} <a href="{% url 'accountss:register' %}" id="customer_register_link">{% trans 'Create Account' %}</a>
                                     
                               
                                 </p>
@@ -92,7 +86,7 @@ Login
                          <div class="row">
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="text-center px-4">
-                                    <a href="#" class="mr-2" style="text-decoration: none; pointer-events:none;">Sign In with</a>
+                                    <a href="#" class="mr-2" style="text-decoration: none; pointer-events:none;">{% trans 'Sign In with' %}</a>
                                     <a href="{% provider_login_url 'google' %}" class="google-sign-in mr-2"><i class="fa fa-google text-danger"></i>  Google</a> &nbsp; | &nbsp;
                                     <a href="{% provider_login_url 'github' %}" class="github-sign-in"><i class="fa fa-github"></i>  Github</a> &nbsp; | &nbsp;
                                     <a href="{% provider_login_url 'facebook' method="oauth2" %}" class="facebook-sign-in ml-2"><i class="fa fa-facebook text-primary"></i>  Facebook</a> 

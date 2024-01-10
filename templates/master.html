@@ -1,5 +1,4 @@
 {% load static %}
-{% comment %} {% load cookie_law %} {% endcomment %}
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -47,8 +46,6 @@
         {% endblock %}
         {% include 'partials/menu.html' %}
         {% block content %}
-        {% comment %} <p> {% cookie_consent %}</p> {% endcomment %}
-        {% comment %} <a href="{% url cookie_law_policy %}">Politique de cookies</a> {% endcomment %}
         {% endblock %}
         {% include 'partials/footer.html' %}
     </div>

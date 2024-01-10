@@ -31,19 +31,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-# DEBUG = True
+DEBUG = True
 
 SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 
 # # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = config('DEBUG', default=True, cast=bool)
+# DEBUG = config('DEBUG', default=False, cast=bool)
 
 
 # # load production server from .env
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
 
 ALLOWED_HOSTS = []
+
+# ALLOWED_HOSTS = [
+#     'localhost',
+#     '.herokuapp.com'
+# ]
 
 
 # Application definition
@@ -59,7 +64,6 @@ INSTALLED_APPS = [
     'rest_framework',  # new
     'corsheaders',  # new 
     # 'rest_framework_swagger',
-    # 'coupons.apps.CouponsConfig',
     'allauth',
     'allauth.account',
     # 'social_django',
@@ -67,14 +71,13 @@ INSTALLED_APPS = [
     'captcha',
     'accountss',
     'Ecommerce.apps.EcommerceConfig',
-    # 'cart.apps.CartConfig',
     # 'djstripe', 
     'crispy_forms',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
-    'debug_toolbar', #new
+    # 'debug_toolbar', #new
     # 'cookie_law', #new
     # 'django_cookie_law', #new
     'axes', #new
@@ -101,7 +104,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'allauth.account.middleware.AccountMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware', #new
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware', #new
     # 'cookie_law.middleware.CookieLawMiddleware', #new
     # 'django_cookie_law.middleware.CookieLawMiddleware', #new
     'axes.middleware.AxesMiddleware',
@@ -208,8 +211,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# CART_SESSION_ID = 'cart'
-
 LOGIN_URL = 'accountss:login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = 'accountss:welcome'
@@ -277,9 +278,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'repo',
             'read:org',
         ],
-        # 'AUTH_PARAMS': {
-        #     'access_type': 'online',
-        # },
+      
 
 
     },
@@ -389,20 +388,20 @@ OAUTH2_PROVIDER = {
 }
 
 
-DEBUG_TOOLBAR_PANELS = [
-    'debug_toolbar.panels.versions.VersionsPanel',
-    'debug_toolbar.panels.timer.TimerPanel',
-    'debug_toolbar.panels.settings.SettingsPanel',
-    'debug_toolbar.panels.headers.HeadersPanel',
-    'debug_toolbar.panels.request.RequestPanel',
-    'debug_toolbar.panels.sql.SQLPanel',
-    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-    'debug_toolbar.panels.templates.TemplatesPanel',
-    'debug_toolbar.panels.cache.CachePanel',
-    'debug_toolbar.panels.signals.SignalsPanel',
-    'debug_toolbar.panels.logging.LoggingPanel',
-    'debug_toolbar.panels.redirects.RedirectsPanel',
-]
+# DEBUG_TOOLBAR_PANELS = [
+#     'debug_toolbar.panels.versions.VersionsPanel',
+#     'debug_toolbar.panels.timer.TimerPanel',
+#     'debug_toolbar.panels.settings.SettingsPanel',
+#     'debug_toolbar.panels.headers.HeadersPanel',
+#     'debug_toolbar.panels.request.RequestPanel',
+#     'debug_toolbar.panels.sql.SQLPanel',
+#     'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+#     'debug_toolbar.panels.templates.TemplatesPanel',
+#     'debug_toolbar.panels.cache.CachePanel',
+#     'debug_toolbar.panels.signals.SignalsPanel',
+#     'debug_toolbar.panels.logging.LoggingPanel',
+#     'debug_toolbar.panels.redirects.RedirectsPanel',
+# ]
 
 INTERNAL_IPS = [
     '127.0.0.1',

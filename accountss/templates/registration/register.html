@@ -1,14 +1,15 @@
 {% extends "master.html" %}
 {% load static %}
+{% load i18n %}
 {% block title %}
-Register
+{% trans 'Register' %}
 {% endblock %}
 {% block content %}
 {% include 'partials/header.html' %}
 {% include 'partials/menu.html' %}
 {% load crispy_forms_tags %}
 {% load socialaccount %}
-{% comment %} {% providers_media_js %} {% endcomment %}
+
 <style>
     .error{
         color: red;
@@ -19,7 +20,7 @@ Register
     	<!--Page Title-->
     	<div class="page section-header text-center">
 			<div class="page-title">
-        		<div class="wrapper"><h1 class="page-width">Create your account</h1></div>
+        		<div class="wrapper"><h1 class="page-width">{% trans 'Create Account' %}</h1></div>
       		</div>
 		</div>
         <!--End Page Title-->
@@ -41,13 +42,7 @@ Register
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
                            </div>
                         {%endif%} 
-                        {% comment %} {% if messages %}
-                        {% for message in messages %}
-                        <p {% if message.tags %} class="alert alert-dismissible alert-{{message.tags}} mb-5" {% endif %} role="alert">{{message}}
-                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
-                        </p>
-                        {% endfor %}
-                        {% endif %}         {% endcomment %}
+                   
                             <form method="post" novaldiate  id="CustomerLoginForm" accept-charset="UTF-8" class="contact-form">
                                 {% csrf_token %}
     
@@ -63,39 +58,31 @@ Register
                                         <div class="form-group mt-2">
                                         <input class="" type="checkbox" id="terms-conditions" name="terms">
                                         <label class="form-check-label" for="terms-conditions">
-                                            I agree to
-                                        <a href="{% url "Ecommerce:terms" %}">privacy policy & terms</a>
+                                            {% trans 'I agree to' %}
+                                        <a href="{% url "Ecommerce:terms" %}">{% trans 'privacy policy & terms' %}</a>
                                         </label>                       	
                                         </div>
                                     </div>
 
-                                    {% comment %} <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                        <div class="form-group">
-                                        <label for="">Recaptcha:</label>
-                                            {{ form.captcha }}
-                                        </div>
-        
-                                      
-                                    </div> {% endcomment %}
                               
                               <div class="row mt-2">
                                 <div class="text-center col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <input type="submit" class="btn mb-3" value="Create">
+                                    <input type="submit" class="btn mb-3" value="{% trans 'Create' %}">
                                     
                                 </div>
                               </div>
 
                               <p class="text-center">
-                                <span class="text-muted">Already have an account ?</span>
+                                <span class="text-muted">{% trans 'Already have an account ?' %}</span>
                                 <a href="{% url "accountss:login" %}">
-                                <span>Sign in instead</span>
+                                <span>{% trans 'Sign in instead' %}</span>
                                 </a>
                               </p>
 
                               <div class="row">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                      <div class="text-center px-4">
-                                         <a href="#" class="mr-2" style="text-decoration: none; pointer-events:none;">Sign In with</a>
+                                         <a href="#" class="mr-2" style="text-decoration: none; pointer-events:none;">{% trans 'Sign In with' %}</a>
                                          <a href="{% provider_login_url 'google' %}" class="google-sign-in mr-2"><i class="fa fa-google text-danger"></i>  Google</a> &nbsp; | &nbsp;
                                          <a href="{% provider_login_url 'github' %}" class="github-sign-in"><i class="fa fa-github"></i>  Github</a> &nbsp; | &nbsp;
                                          <a href="{% provider_login_url 'facebook' %}" class="facebook-sign-in ml-2"><i class="fa fa-facebook text-primary"></i>  Facebook</a> 

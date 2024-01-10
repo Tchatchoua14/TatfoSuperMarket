@@ -10,10 +10,10 @@
     
                     <div class="language-dropdown">
                         {% comment %} {% for languag in languages %} {% endcomment %}
-                        <span class="language-dd"><a href="/en" id="english" style="text-decoration: none;">English <img src="{% static "images/flag-uk.png" %}" alt="" id="english1" /></a></span>
+                        <span class="language-dd"><a href="/en" id="english" style="text-decoration: none;">{% trans 'English' %} <img src="{% static "images/flag-uk.png" %}" alt="" id="english1" /></a></span>
                        
                         <ul id="language" class="text-uppercase">
-                            <a href="/fr"  id="french" style="text-decoration: none;"><li class="">French<img src="{% static "images/flag-france.png" %}" alt="" class="ml-1" id="french2"/></li></a> 
+                            <a href="/fr"  id="french" style="text-decoration: none;"><li class="">{% trans 'French' %}<img src="{% static "images/flag-france.png" %}" alt="" class="ml-1" id="french2"/></li></a> 
                         </ul>
                         {% comment %} {% endfor %} {% endcomment %}
                     </div>
@@ -22,18 +22,18 @@
                     <p class="phone-no"><i class="anm anm-phone-s"></i> +(237) 691 167 590</p>
                 </div>
                 <div class="col-sm-4 col-md-4 col-lg-4 d-none d-lg-none d-md-block d-lg-block">
-                	<div class="text-center"><p class="top-header_middle-text"> Worldwide Express Shipping</p></div>
+                	<div class="text-center"><p class="top-header_middle-text"> {% trans 'Worldwide Express Shipping' %}</p></div>
                 </div>
                 <div class="col-2 col-sm-4 col-md-3 col-lg-4 text-right">
                 	<span class="user-menu d-block d-lg-none"><i class="anm anm-user-al" aria-hidden="true"></i></span>
                     <ul class="customer-links list-inline">
                         
                         {% if user.is_authenticated %}
-                        <li><a href="{% url 'accountss:profile' %}"><span class="text-lowercase mr-1">{{ user.email }}</span></a></li>
-                        <li><a href="{% url 'accountss:logout' %}"><span class="mr-1">Log Out</span></a></li>
+                        <li><a href="{% url 'accountss:profile' %}"><span class="text-lowercase mr-1">{{ user.username }}</span></a></li>
+                        <li><a href="{% url 'accountss:logout' %}"><span class="mr-1">{% trans 'Log Out' %}</span></a></li>
                         {% else %}
-                        <li><a href="{% url 'accountss:login' %}"><span class="mr-1">Log In</span></a></li>
-                        <li> <a href="{% url 'accountss:register' %}"><i class="fa fa-user mr-1" style="margin-top: -2px; margin-right: 1px;"></i>Create Account</a> </li>
+                        <li><a href="{% url 'accountss:login' %}"><span class="mr-1">{% trans 'Log In' %}</span></a></li>
+                        <li> <a href="{% url 'accountss:register' %}"><i class="fa fa-user mr-1" style="margin-top: -2px; margin-right: 1px;"></i>{% trans 'Create Account' %}</a> </li>
                         {% endif %}
                         <li><a href="{% url 'Ecommerce:wishlist' %}"><i class="fa fa-heart mr-1" style="margin-top: -2px; margin-right: 1px;"></i>Wishlist</a></li>
                         

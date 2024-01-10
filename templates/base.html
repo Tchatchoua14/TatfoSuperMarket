@@ -1,13 +1,11 @@
 {% extends "master.html" %}
-{% comment %} {% load debug_toolbar %} {% endcomment %}
 {% load static %}
 {% load i18n %}
-{% comment %} {% get_current_language as current_language %} {% endcomment %}
 {% block title %}
-Home
+{% trans 'Home' %} 
 {% endblock %}
 
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags %} 
 {% block content1 %}
 
 {% get_available_languages as LANGUAGES %}
@@ -203,7 +201,7 @@ Home
                     	<button type="button" class="search-trigger"><i class="icon anm anm-search-l"></i></button>
                     </div>
                 </div>
-        	</div>
+        	</div> 
         </div>
     </div>
     <!--End Header--> 
@@ -251,7 +249,7 @@ Home
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="section-header text-center">
-                        <h2 class="h2">New Arrivals {% trans "i am" %}</h2>
+                        <h2 class="h2">New Arrivals</h2>
                         <p>Browse the huge variety of our products</p>
                     </div>
                     <div class="tabs-listing">

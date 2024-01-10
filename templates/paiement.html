@@ -50,11 +50,11 @@ Paiement
                             </div>
                   
                             <div class="col-md-6">
-                                <form id="payment-form" method="post" action="">
+                                {% comment %} <form id="payment-form" method="post" action="">
                                     {% csrf_token %}
                                     <div id="card-element"></div>
                                    <button class="btn mb-4" value="Place order" type="submit">PAY Stripe</button>  
-                               </form> 
+                               </form>  {% endcomment %}
                             </div>
                           </div>
                         </div>

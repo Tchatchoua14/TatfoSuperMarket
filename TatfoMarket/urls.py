@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from django.utils.translation import gettext_lazy as _
 from django.conf.urls.i18n import i18n_patterns
-import debug_toolbar
+# import debug_toolbar
 from rest_framework_simplejwt.views import TokenObtainPairView #new
 # from oauth2_provider import views as oauth2_views #new
 
@@ -35,14 +35,9 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 urlpatterns = [
     path('admin/', login_required(admin.site.urls)),
     # path('', include('Ecommerce.urls')),
-    path('', include('accountss.urls')),
     path('', include('django.contrib.auth.urls')),
-    # path('cart/', include('cart.urls', namespace='cart')),
-    # path('coupons/', include('coupons.urls', namespace='coupons')),
     path('accounts/', include('allauth.urls')),
-    # re_path('accounts/', include('social_django.urls', namespace='social')),
     # path('social-auth/', include('social_django.urls', namespace='social')),
-    #path('order/', include('order.urls', namespace='order')),
     # path('cookies/', include('cookie_law.urls')), #new
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'), #new
     path('auth/', include('rest_framework.urls')),
@@ -58,6 +53,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns (
     path('', include('Ecommerce.urls')),
+    path('', include('accountss.urls')),
 )
 
 #handling the 404 error
@@ -66,6 +62,6 @@ handler404 = 'Ecommerce.views.error_404_view'
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ]
+    # urlpatterns += [
+    #     path('__debug__/', include(debug_toolbar.urls)),
+    # ]

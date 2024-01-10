@@ -126,8 +126,12 @@ msgid "I agree to"
 msgstr "J'accepte"
 
 #: .\Ecommerce
-msgid "Create an Account"
+msgid "Create Account"
 msgstr "Créer un compte"
+
+#: .\Ecommerce
+msgid "Don't have a account?"
+msgstr "Avez-vous déjà un compte"
 
 #: .\Ecommerce
 msgid "Anglais"
@@ -163,7 +167,7 @@ msgstr "liste de souhaits"
 
 #: .\Ecommerce
 msgid "Worldwide Express Shipping"
-msgstr "Expédition Express Dans Le Monde Entier"
+msgstr "Expédition Express Dans Le Monde"
 
 #: .\Ecommerce
 msgid "All payment are Secured and trusted."
@@ -216,6 +220,25 @@ msgstr "Services clients"
 #: .\Ecommerce
 msgid "Careers"
 msgstr "Carrières"
+
+#: .\Ecommerce
+msgid "Home"
+msgstr "Accueil"
+
+#: .\Ecommerce
+msgid "Subscribe"
+msgstr "S'abonner"
+
+#: .\Ecommerce
+msgid "sign up for"
+msgstr "Inscrivez vous pour"
+
+#: .\Ecommerce
+msgid "Email address"
+msgstr "Adresse e-mail"
+
+
+
 
 
 
