@@ -18,16 +18,11 @@ from django.contrib import admin
 from django.conf import settings
 from django.contrib.auth.decorators import login_required #new
 from django.conf.urls.static import static
-from django.urls import path, include, re_path
-from django.utils.translation import gettext_lazy as _
 from django.conf.urls.i18n import i18n_patterns
+from django.urls import path, include
 # import debug_toolbar
 from rest_framework_simplejwt.views import TokenObtainPairView #new
-# from oauth2_provider import views as oauth2_views #new
-
-# from rest_framework_swagger.views import get_swagger_view
-
-# schema_view = get_swagger_view(title="Notes API")
+from oauth2_provider import views as oauth2_views #new
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView #new
 
@@ -35,21 +30,15 @@ admin.site.login = login_required(admin.site.login)
 
 urlpatterns = [
     path('admin/', (admin.site.urls)),
-    # path('', include('Ecommerce.urls')),
     path('', include('django.contrib.auth.urls')),
     path('accounts/', include('allauth.urls')),
-    # path('social-auth/', include('social_django.urls', namespace='social')),
-    # path('cookies/', include('cookie_law.urls')), #new
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'), #new
     path('auth/', include('rest_framework.urls')),
     path('api/v1/', include('api.urls')),
-    # path('api/v1', include('router.urls')),
-    # path('api/docs/', schema_view), #new 
     path('oauth/', include('oauth2_provider.urls', namespace='oauth2_provider')), #new
-    # path('oauth2-info/', 'oauth2_views.AuthorizationEndpoint.as_view()', name='oauth2_info'), #new
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'), #new
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'), #new
-     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
 urlpatterns += i18n_patterns (

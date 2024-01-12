@@ -38,7 +38,7 @@ SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 # # SECURITY WARNING: don't run with debug turned on in production!
 
 # DEBUG = config('DEBUG', default=False, cast=bool)
-# DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
+
 DEFAULT_CHARSET = 'UTF-8'
 DEFAULT_CONTENT_TYPE = 'text/html'
 SITE_DESCRIPTION = 'Vous retrouverez tous ce dont\
@@ -80,7 +80,7 @@ INSTALLED_APPS = [
     'captcha',
     'accountss',
     'Ecommerce.apps.EcommerceConfig',
-    # 'stripe', 
+    'stripe', 
     'crispy_forms',
     # 'debug_toolbar', #new
     'axes', #new
@@ -104,7 +104,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'allauth.account.middleware.AccountMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware', #new
     'axes.middleware.AxesMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -185,7 +184,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'fr-fr'
-# LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -398,7 +396,6 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser",],
-    # "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema", #new
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema", #new
 }
 
