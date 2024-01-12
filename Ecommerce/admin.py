@@ -15,6 +15,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['available', 'created', 'updated']
     list_editable = ['price', 'available']
     ordering = ('-created',)
+    save_on_top = True
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -56,6 +57,3 @@ admin.site.register(Order)
 class NewslettersAdmin(admin.ModelAdmin):
     list_display = ['email', 'created']
 
-# @admin.register(Verification)
-# class VerificationAdmin(admin.ModelAdmin,):
-# 	list_display = ['id', 'token','user', 'verify']

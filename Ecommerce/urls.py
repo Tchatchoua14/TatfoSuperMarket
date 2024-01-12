@@ -40,7 +40,6 @@ urlpatterns = [
     path('search/', views.search, name='search'), # new
 
     path('apply/', views.coupon_apply, name='apply'),
-    # path('account-verify/<slug:token>', views.account_verify, name="account-verify"),
 
 ] 
 

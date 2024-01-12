@@ -56,27 +56,17 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [IsAuthenticated]
 
 
-@decorators.api_view(["POST"])
-@decorators.permission_classes([permissions.AllowAny])
-def registration(request):
-    serializer = UserCreateSerializer(data=request.data)
-    if not serializer.is_valid():
-        return response.Response(serializer.errors, status.HTTP_400_BAD_REQUEST)        
-    user = serializer.save()
-    refresh = RefreshToken.for_user(user)
-    res = {
-        "refresh": str(refresh),
-        "access": str(refresh.access_token),
-    }
-    return response.Response(res, status.HTTP_201_CREATED)
+# @decorators.api_view(["POST"])
+# @decorators.permission_classes([permissions.AllowAny])
+# def registration(request):
+#     serializer = UserCreateSerializer(data=request.data)
+#     if not serializer.is_valid():
+#         return response.Response(serializer.errors, status.HTTP_400_BAD_REQUEST)        
+#     user = serializer.save()
+#     refresh = RefreshToken.for_user(user)
+#     res = {
+#         "refresh": str(refresh),
+#         "access": str(refresh.access_token),
+#     }
+#     return response.Response(res, status.HTTP_201_CREATED)
 
-# class DevelopperListView(OAuthLibMixin, View):
-#     def get(self, request):
-#         if not request.user.is_authenticated:
-#             return JsonResponse({'error': 'Unauthorized'}, status=401)
-
-#     access_token = AccessToken.objects.get(token=request.auth)
-
-#     developer = access_token.user
-#     print(developer)
-    # return JsonResponse({'developerx': 'developerdddddd'})

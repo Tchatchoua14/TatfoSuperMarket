@@ -24,6 +24,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('delete_account/', views.delete_account, name="delete_account"),
     path('profile/', MyProfile.as_view(), name='profile'),
+     # path('account-verify/<slug:token>', views.account_verify, name="account-verify"),
 ]
 
 

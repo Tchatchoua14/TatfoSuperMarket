@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from .models import Category, Product, Coupon, Wishlist, Livraison, Cart, Newsletters, Order, BillingDetails, Verification
+from .models import Category, Product, Coupon, Wishlist, Livraison, Cart, Newsletters, Order, BillingDetails
 from django.db.models import Q
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -447,14 +447,5 @@ def send_email_after_registration(email, token):
 # 	messages.success(request, "Your Account has been Verified, You can Login Now.")
 # 	return redirect('accountss:login')  
 
-
-# def set_language(request):
-    
-#     if translation.get_language() == 'fr':
-#         translation.activate('en')
-#     else:
-#         translation.activate('fr')
-#     next = request.META.get('HTTP_REFERER', reverse('Ecommerce:home'))
-#     return HttpResponseRedirect(next)
 
 

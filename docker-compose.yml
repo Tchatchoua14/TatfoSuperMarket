@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - '8000:8000'
+    # depends_on:
+    #   - db
+
+    # db:
+    #   image: mysql:lastest
+    #   environment:
+    #     MYSQL_DB: tatfosupermarket
+    #     MYSQL_USER: root
+    #     MYSQL_PASSWORD: ""
+    #   ports:
+    #     - "3306:3306"

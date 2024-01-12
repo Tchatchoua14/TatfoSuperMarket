@@ -30,12 +30,12 @@
                         
                         {% if user.is_authenticated %}
                         <li><a href="{% url 'accountss:profile' %}"><span class="text-lowercase mr-1">{{ user.username }}</span></a></li>
-                        <li><a href="{% url 'accountss:logout' %}"><span class="mr-1">{% trans 'Log Out' %}</span></a></li>
+                        <li><a href="{% url 'accountss:logout' %}"><span class="text-lowercase mr-1">{% trans 'Log Out' %}</span></a></li>
+                        <li><a href="{% url 'Ecommerce:wishlist' %}"><i class="fa fa-heart mr-1" style="margin-top: -2px; margin-right: 1px;"></i>Wishlist</a></li>
                         {% else %}
-                        <li><a href="{% url 'accountss:login' %}"><span class="mr-1">{% trans 'Log In' %}</span></a></li>
+                        <li><a href="{% url 'accountss:login' %}"><span class="mr-1">{% trans 'Log in' %}</span></a></li>
                         <li> <a href="{% url 'accountss:register' %}"><i class="fa fa-user mr-1" style="margin-top: -2px; margin-right: 1px;"></i>{% trans 'Create Account' %}</a> </li>
                         {% endif %}
-                        <li><a href="{% url 'Ecommerce:wishlist' %}"><i class="fa fa-heart mr-1" style="margin-top: -2px; margin-right: 1px;"></i>Wishlist</a></li>
                         
                     </ul>
                 </div>

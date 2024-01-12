@@ -31,9 +31,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView #new
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView #new
 
+admin.site.login = login_required(admin.site.login)
 
 urlpatterns = [
-    path('admin/', login_required(admin.site.urls)),
+    path('admin/', (admin.site.urls)),
     # path('', include('Ecommerce.urls')),
     path('', include('django.contrib.auth.urls')),
     path('accounts/', include('allauth.urls')),

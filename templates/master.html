@@ -1,8 +1,10 @@
 {% load static %}
+{% load compress %}
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{% static "images/favicon.png" %}" />
@@ -18,8 +20,8 @@
     <meta property="twitter:name" content="{{product.name}}">
     <meta property="twiter:description" content="{{product.description}}">
     <meta property="twitter:image1" content="{{product.image1.url}}">
-
-
+     
+    {% compress css %}
     <!-- Plugins CSS -->
     <link rel="stylesheet" href="{% static "css/plugins.css" %}">
     <!-- Bootstap CSS -->
@@ -27,8 +29,7 @@
     <!-- Main Style CSS -->
     <link rel="stylesheet" href="{% static "css/style.css" %}"> 
     <link rel="stylesheet" href="{% static "css/responsive.css" %}">
-    <link rel="stylesheet" href="{% static "js/datatable/dataTables.bootstrap4.css" %}">
-    <link rel="stylesheet" href="{% static "js/datatable/dataTables.bootstrap4.min.css" %}">
+    {% endcompress %}
     {% comment %} {% render_cookie_law %} {% endcomment %}
     <title>{% block title %}TatfoSuperMarket{% endblock %}</title>
     {% load crispy_forms_tags %}
@@ -53,6 +54,8 @@
     {% block js %}
     {% endblock %}
 <!-- Localization -->
+
+
 <script type="text/javascript">
     var url ="";
    $("#changeLang").change(function(){
@@ -73,16 +76,7 @@
   }
   </script>
 
-  {% comment %} <script type="text/javascript">
-    var domain = 'https://apps.facebook.com/',
-        redirectURI = domain + {{ FACEBOOK_APP_NAMESPACE }} + '/';
-
-    window.top.location = 'https://www.facebook.com/dialog/oauth/' +
-                                '?client_id={{ FACEBOOK_KEY }}' +
-                                '&redirect_uri=' + encodeURIComponent(redirectURI) +
-                                '&scope={{ FACEBOOK_EXTENDED_PERMISSIONS }}';
-</script> {% endcomment %}
-           <!-- Including Jquery -->
+  {% compress js %}
        <script src="{% static "js/vendor/jquery-3.3.1.min.js" %}"></script>
        <script src="{% static "js/vendor/modernizr-3.6.0.min.js" %}"></script>
        <script src="{% static "js/vendor/jquery.cookie.js" %}"></script>
@@ -93,11 +87,7 @@
        <script src="{% static "js/popper.min.js" %}"></script>
        <script src="{% static "js/lazysizes.js" %}"></script>
        <script src="{% static "js/main.js" %}"></script>
-       <script src="{% static "js/datatable/dataTables.bootstrap4.js" %}"></script>
-       <script src="{% static "js/datatable/dataTables.bootstrap4.min.js" %}"></script>
-       <script src="{% static "js/datatable/jquery.dataTables.js" %}"></script>
-       <script src="{% static "js/datatable/jquery.dataTables.min.js" %}"></script>
-       <script src="{% static "js/datatables-responsive/main.js" %}"></script>
+  {% endcompress %}
        <!--For Newsletter Popup-->
        <script>
           jQuery(document).ready(function(){  
@@ -184,6 +174,7 @@
 
 
       </script>
+
 
       <!-- Start of Async Callbell Code -->
 

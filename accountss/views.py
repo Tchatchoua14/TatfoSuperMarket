@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from accountss.forms import RegisterForm, CustomLoginForm, UserUpdateForm, ProfileUpdateForm
-from Ecommerce.views import send_email_after_registration
-from Ecommerce.models import Verification
+# from Ecommerce.views import send_email_after_registration
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -19,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from django.views import View
-import uuid
+# import uuid
 from captcha.fields import ReCaptchaField
 
 
@@ -114,14 +113,6 @@ class MyPasswordResetConfirmView(PasswordResetConfirmView):
 
 class MyPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'registration/password_reset_email.html'
-
-# class Home(TemplateView):
-#     template_name = 'index.html' 
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["username"] = self.request.user.username
-#         return context
 
 
 class MyProfile(LoginRequiredMixin, View):

@@ -38,6 +38,14 @@ SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 # # SECURITY WARNING: don't run with debug turned on in production!
 
 # DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
+DEFAULT_CHARSET = 'UTF-8'
+DEFAULT_CONTENT_TYPE = 'text/html'
+SITE_DESCRIPTION = 'Vous retrouverez tous ce dont\
+    vous aurez besoin pour le quotidien.'
+META_KEYWORDS = 'shopping, location, ecommerce, accessories,\
+    TV, Audio, smartphone, Mode, Electromenager'
+SITE_NAME = 'TatfoSuperMarket'
 
 
 # # load production server from .env
@@ -63,30 +71,24 @@ INSTALLED_APPS = [
     'django.contrib.sites', #new
     'rest_framework',  # new
     'corsheaders',  # new 
-    # 'rest_framework_swagger',
     'allauth',
     'allauth.account',
-    # 'social_django',
-    # 'social_core',
-    'captcha',
-    'accountss',
-    'Ecommerce.apps.EcommerceConfig',
-    # 'djstripe', 
-    'crispy_forms',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
+    'captcha',
+    'accountss',
+    'Ecommerce.apps.EcommerceConfig',
+    # 'stripe', 
+    'crispy_forms',
     # 'debug_toolbar', #new
-    # 'cookie_law', #new
-    # 'django_cookie_law', #new
     'axes', #new
     'api',
     'oauth2_provider',
     'drf_spectacular', #new
     'rest_framework_simplejwt', #new
-    # 'django_search', #new
-    # 'django_datatable',
+    'compressor',
 
 ]
 
@@ -94,7 +96,6 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    # 'social_django.middleware.SocialAuthExceptionMiddleware', #new
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware', #new
@@ -105,8 +106,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'allauth.account.middleware.AccountMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware', #new
-    # 'cookie_law.middleware.CookieLawMiddleware', #new
-    # 'django_cookie_law.middleware.CookieLawMiddleware', #new
     'axes.middleware.AxesMiddleware',
     'corsheaders.middleware.CorsMiddleware',
    
@@ -127,11 +126,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'social_django.context_processors.backends', #new
-                # 'social_django.context_processors.login_redirect', #new
-                # 'cart.context_processors.cart', #new
                 'Ecommerce.context_processors.totalitem', #new
-                # 'Ecommerce.context_processors.carts', #new
                 # 'django.core.context_processors.i18n', #new
                
 
@@ -147,10 +142,23 @@ WSGI_APPLICATION = 'TatfoMarket.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
+
+     'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tatfosupermarket',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode = 'STRICT_TRANS_TABLES'", 
+        },
+    },
+
 }
 
 
@@ -203,6 +211,21 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]
+
+# Compress Static files (CSS, JavaScript)
+# https://django-compressor.readthedocs.io/en/latest/
+
+COMPRESS_ENABLED = True
+COMPRESS_CSS_HASHING_METHOD = 'content'
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -213,7 +236,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_URL = 'accountss:login'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = 'accountss:welcome'
+LOGOUT_REDIRECT_URL = 'accountss:login'
 # ACCOUNT_LOGOUT_REDIRECT_URL = 'accountss:welcome'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #new
@@ -221,15 +244,16 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #new
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST = 'smtp.mailgun.org'
-# EMAIL_HOST = 'smtp.mailtrap.io'
-# EMAIL_PORT = 2525
-# EMAIL_USE_TLS = True
+# SENDGRID CONFIG
 # EMAIL_PORT = 587
-# EMAIL_HOST_USER = "Tchatchouaviny@yahoo.fr"
+# EMAIL_USE_TLS = True
+# SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
+# EMAIL_HOST = 'smtp-relay.sendinblue.com'
+# EMAIL_HOST_USER = 'vinyassous@gmail.com'
 # EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL = 'TatfoSuperMarketMarket <info@rm.com>'
+# BASE_URL = ''
+# SESSION_COOKIE_SECURE = True
 
 
 MESSAGE_TAGS = {
@@ -243,6 +267,13 @@ MESSAGE_TAGS = {
 RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', #new
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'axes.backends.AxesStandaloneBackend',
+    ]
+
+SITE_ID = 1
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
@@ -260,11 +291,11 @@ SOCIALACCOUNT_PROVIDERS = {
         },
 
         
-        'APPS': {
-            'client_id': '123',
-            'secret': '456',
+        'APP': {
+            'client_id': config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'),
+            'secret': config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'),
             'key': ''
-        }
+        },
     },
 
 
@@ -273,13 +304,17 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         
-         'SCOPE': [
-            'user',
-            'repo',
-            'read:org',
-        ],
-      
+        #  'SCOPE': [
+        #     'user',
+        #     'repo',
+        #     'read:org',
+        # ],
 
+          'APP': {
+            'client_id': config('SOCIAL_AUTH_GITHUB_SECRET'),
+            'secret': config('SOCIAL_AUTH_GITHUB_KEY'),
+            'key': ''
+        },
 
     },
 
@@ -288,12 +323,12 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
 
-        'METHOD' : 'oauth2',
+        # 'METHOD' : 'oauth2',
         
-         'SCOPE': [
-            'email',
-            'public_profile'
-        ],
+        #  'SCOPE': [
+        #     'email',
+        #     'public_profile'
+        # ],
 
         # 'AUTH_PARAMS': {
         #     'auth_type': 'reauthentificate',
@@ -302,37 +337,21 @@ SOCIALACCOUNT_PROVIDERS = {
         # 'EXCHANGE_TOKEN': True,
         # 'VERIFIED_EMAIL': False,
 
+          'APP': {
+            'client_id': config('SOCIAL_AUTH_FACEBOOK_SECRET'),
+            'secret': config('SOCIAL_AUTH_FACEBOOK_KEY'),
+            'key': '' 
+        },
 
-    }
+
+    },
 }
 
-# ACCOUNT_LOGIN_ON_GET=True
 
-# ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_SESSION_REMEMBER = True
-SOCIALACCOUNT_QUERY_EMAIL = True
 
-SITE_ID = 1
-
-AUTHENTICATION_BACKENDS = [
-    # 'social_core.backends.github.GithubOAuth2', #new
-    # 'social_core.backends.google.GoogleOAuth2', #new
-    # 'social_core.backends.google.GoogleOAuth', #new cccc
-    # 'social_core.backends.facebook.FacebookOAuth2', #new
-
-    'django.contrib.auth.backends.ModelBackend', #new
-    'allauth.account.auth_backends.AuthenticationBackend',
-    'axes.backends.AxesStandaloneBackend',
-    ]
 
 ACCOUNT_EMAIL_REQUIRED = True #new
-
-# http://127.0.0.1:8000/google/login/callback
-# http://127.0.0.1:8000/google/
-
-# SOCIAL_AUTH_REQUIRE_POST = True
-
-# SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
@@ -431,6 +450,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SESSION_COOKIE_AGE = 1800
 
+
 # SWAGGER_SETTINGS = {
 #     'USE_SESSION_AUTH': False,
 #     'SECURITY_DEFINITIONS': {
@@ -453,5 +473,22 @@ SESSION_COOKIE_AGE = 1800
 # AWS_ACCESS_KEY_ID = 'votre access key'
 # AWS_SECRET_ACCESS_KEY = 'votre '
 # AWS_STORAGE_BUCKET_NAME = 'nom de votre bucket'
+
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient"
+#         },
+#         "KEY_PREFIX": "rxxs"
+#     }
+# }
+
+# CONFIG REDIS SERVER
+# REDIS_HOST = 'localhost'
+# REDIS_PORT = 6379
+# REDIS_DB = 1
 
 
