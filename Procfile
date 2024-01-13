@@ -1,1 +1,1 @@
-web: gunicorn config.wsgi
+web: gunicorn TatfoMaket.wsgi --log-file -

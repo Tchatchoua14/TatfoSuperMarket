@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from decouple import config #new
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
@@ -31,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True
+DEBUG = False
 
 SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 
@@ -45,18 +46,18 @@ SITE_DESCRIPTION = 'Vous retrouverez tous ce dont\
     vous aurez besoin pour le quotidien.'
 META_KEYWORDS = 'shopping, location, ecommerce, accessories,\
     TV, Audio, smartphone, Mode, Electromenager'
-SITE_NAME = 'TatfoSuperMarket'
+
+SITE_NAME = 'Tatfosupermarket'
 
 
 # # load production server from .env
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
 
-ALLOWED_HOSTS = []
-
-# ALLOWED_HOSTS = [
-#     'localhost',
-#     '.herokuapp.com'
-# ]
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'Tatfosupermarket.herokuapp.com'
+]
 
 
 # Application definition
@@ -107,6 +108,7 @@ MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware', #new
     'axes.middleware.AxesMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
    
 ]
 
@@ -141,25 +143,42 @@ WSGI_APPLICATION = 'TatfoMarket.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
+   
+     'default':  dj_database_url.config(
+        conn_max_age=500,
+        ssl_require=True),
+
+     # 'default': db_config #soit ca
+   
+
+    #  'default': {
+        # dj_database_url.config(default=db_url) # ajouter
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'tatfosupermarket',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306',
+        # 'OPTIONS': {
+        #     'init_command': "SET sql_mode = 'STRICT_TRANS_TABLES'", 
+        # },
     # },
-
-     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tatfosupermarket',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode = 'STRICT_TRANS_TABLES'", 
-        },
-    },
-
 }
 
+db_url = os.environ.get('CLEARDB_DATABASE_URL')
+
+# db_config = dj_database_url.parse(db_url) #new
+
+# user = db_config['USER']
+# password = db_config['PASSWORD']
+# host = db_config['HOST']
+# port = db_config['PORT']
+# db_name = db_config['NAME']
+
+
+# if 'OPTIONS' not in db_config:
+#     db_config['OPTIONS'] = {}
+# db_config['OPTIONS']['init_command'] = "SET sql_mode = 'STRICT_TRANS_TABLES'"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -208,6 +227,8 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
